@@ -8,5 +8,6 @@
   "video": true,
   "videosFolder": "cypress/videos",
   "screenshotsFolder": "cypress/screenshots",
-  "chromeWebSecurity": true
+  "chromeWebSecurity": true,
+  "defaultCommandTimeout":8000
 }
