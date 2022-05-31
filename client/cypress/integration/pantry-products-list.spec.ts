@@ -13,7 +13,7 @@ describe ('Pantry List Expansion Panels and tables', () => {
 
     page.getExpansionTitleByCategory('baking supplies').should('have.text', ' baking supplies ');
 
-    page.getTableProductNameByCategory('baking supplies').first().should('have.text', ' Almon Paste, 8 oz ');
+    page.getTableProductNameByCategory('baking supplies').first().should('have.text', ' Almond Paste, 8 oz ');
 
     page.getTablePurchaseDateByCategory('baking supplies').first().should('have.text', ' 28/04/2022 ');
 
