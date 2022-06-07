@@ -132,7 +132,8 @@ public class ProductController {
                             .append("productName", "$productName")
                             .append("store", "$store")
                             .append("tags", "$tags")
-                            .append("threshold", "$threshold"))),
+                            .append("threshold", "$threshold"))
+                            ),
                 Aggregates.project(
                     Projections.fields(
                         Projections.computed("category", "$_id"),

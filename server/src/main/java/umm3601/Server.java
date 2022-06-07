@@ -67,7 +67,8 @@ public class Server {
     // List products, filtered using query params
     server.get("/api/products", productController::getAllProducts);
 
-    //server.get("/api/products/group", productController::groupProductsByCategory);
+    // List the products grouped by their category
+    server.get("/api/products/group", productController::groupProductsByCategory);
 
     // Get the specified product
     server.get("/api/products/{id}", productController::getProductByID);

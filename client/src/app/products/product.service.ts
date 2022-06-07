@@ -5,12 +5,29 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Product, ProductCategory } from './product';
 import { map } from 'rxjs/operators';
+import { CategorySortItem } from './CategorySortItem';
+import { filter } from 'lodash';
 
 @Injectable()
 export class ProductService {
   readonly productUrl: string = environment.apiUrl + 'products';
 
   constructor(private httpClient: HttpClient) {}
+
+  getGroupedProducts(filters?: {category?: ProductCategory; store?: string }): Observable<CategorySortItem[]> {
+    let httpParams: HttpParams = new HttpParams();
+    if (filters) {
+      if (filters.category) {
+        httpParams = httpParams.set('category', filters.category);
+      }
+      if (filters.store) {
+        httpParams = httpParams.set('store', filters.store);
+      }
+      return this.httpClient.get<CategorySortItem[]>(`${this.productUrl}/group`, {
+        params: httpParams,
+      });
+    }
+  }
 
   getProducts(filters?: { category?: ProductCategory; store?: string }): Observable<Product[]> {
     let httpParams: HttpParams = new HttpParams();

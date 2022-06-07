@@ -13,6 +13,7 @@ import { AddProductToShoppinglistComponent } from './add-product-to-shoppinglist
 // eslint-disable-next-line max-len
 import { ProductExistsInShoppinglistDialogComponent } from './product-exists-in-shoppinglist-dialog/product-exists-in-shoppinglist-dialog.component';
 import { ShoppinglistService } from 'src/app/shoppinglist/shoppinglist.service';
+import { CategorySortItem } from '../CategorySortItem';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   public serverFilteredProducts: Product[];
   public filteredProducts: Product[];
+  public groupedProducts: CategorySortItem[];
 
   public name: string;
   public productBrand: string;
@@ -37,6 +39,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   public productLimit: number;
   getProductsSub: Subscription;
   getUnfilteredProductsSub: Subscription;
+  getGroupedProductsSub: Subscription;
 
   // Boolean for if there are active filters
   public activeFilters: boolean;
@@ -73,6 +76,26 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   constructor(private productService: ProductService, private snackBar: MatSnackBar, private pantryService: PantryService,
     private shoppinglistService: ShoppinglistService, private dialog: MatDialog) { }
+
+
+  getGroupedProductsFromServer(): void {
+    this.unsub();
+    this.getGroupedProductsSub = this.productService.getGroupedProducts(
+      {
+        category: this.productCategory,
+        store: this.productStore
+      }
+    ).subscribe(returnedProducts => {
+      if (this.productCategory || this.productStore) {
+        this.activeFilters = true;
+      }
+      else {
+        this.activeFilters = false;
+      }
+      this.groupedProducts = returnedProducts;
+      this.updateFilter();
+    });
+  }
 
   getProductsFromServer(): void {
     this.unsub();
@@ -118,7 +141,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getProductsFromServer();
+    this.getGroupedProductsFromServer();
+    //this.getProductsFromServer();
   }
 
   ngOnDestroy(): void {
@@ -128,6 +152,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   unsub(): void {
     if (this.getProductsSub) {
       this.getProductsSub.unsubscribe();
+    }
+    if (this.getGroupedProductsSub) {
+      this.getGroupedProductsSub.unsubscribe();
     }
   }
 
