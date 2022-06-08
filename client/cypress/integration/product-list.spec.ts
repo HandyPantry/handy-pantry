@@ -87,13 +87,13 @@ describe ('Product List Expansion Panels', () => {
 
   it('Should check that expansion panels have the correct titles and items by categories', () => {
 
-    page.getExpansionTitleByCategory('baking supplies').should('have.text', ' baking supplies ');
+    page.getExpansionTitleByCategory('baking supplies').should('have.text', ' baking supplies (3) ');
 
     page.getExpansionItemsByCategory('baking supplies').each($product => {
       cy.wrap($product).find('.product-list-category').should('have.text', ' baking supplies ');
     });
 
-    page.getExpansionTitleByCategory('miscellaneous').should('have.text', ' miscellaneous ');
+    page.getExpansionTitleByCategory('miscellaneous').should('have.text', ' miscellaneous (1) ');
 
     page.getExpansionItemsByCategory('miscellaneous').each($product => {
       cy.wrap($product).find('.product-list-category').should('have.text', ' miscellaneous ');
@@ -206,7 +206,7 @@ describe ('Add Product to Pantry List', () => {
     page.clickExpansionAddButton('dairy');
     page.enterNotes('This is a test');
     page.clickDialogAddButton();
-    cy.get('.mat-simple-snack-bar-content').should('contain.text', 'Whole Milk, 1/2 gal successfully added to your pantry.');
+    cy.get('.mat-simple-snack-bar-content').should('contain.text', 'successfully added to your pantry.');
   });
 
 });
@@ -221,10 +221,11 @@ describe ('Add Product to Shopping List', () => {
 
   it('should enter the count of a shoppinglist item then click the button', () => {
     page.clickExpansionAddShoppingButton('toiletries');
+    cy.wait(600);
     page.enterCount('1');
     page.clickDialogAddShoppingButton();
     cy.get('.mat-simple-snack-bar-content')
-    .should('contain.text', 'Citrus Organic Hair Rinse, 8 fl oz x1 successfully added to your Shopping List.');
+    .should('contain.text', 'successfully added to your Shopping List.');
   });
 
 });
@@ -240,6 +241,7 @@ describe('Product already in shopping list add button', () => {
   // Product already in shopping list
   it('should click the add button, then click the button to go to the shopping list page', () => {
     page.clickExpansionAddShoppingButton('baking supplies');
+    cy.wait(1000);
     page.clickDialogGoToShoppingButton();
     page.getUrl().should('be.equal', 'http://localhost:4200/shoppinglist#');
   });
@@ -257,7 +259,7 @@ describe('Delete from Product List', () => {
   it('should click the delete button on a product and confirm delete', () => {
     page.clickExpansionDeleteButton('staples');
     page.clickDialogDeleteButton();
-    cy.get('.mat-simple-snack-bar-content').should('contain.text', 'Chicken Instant Buillion Cubes, 92 g successfully deleted.');
+    cy.get('.mat-simple-snack-bar-content').should('contain.text', 'successfully deleted.');
   });
 
   it('should remove instances from the pantry and the shopping list.', () => {

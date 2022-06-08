@@ -4,6 +4,7 @@
 
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { CategorySortItem } from 'src/app/products/CategorySortItem';
 import { Product, ProductCategory } from '../app/products/product';
 import { ProductService } from '../app/products/product.service';
 
@@ -67,8 +68,30 @@ export class MockProductService extends ProductService {
   }
 
   override getProducts(filters: { category?: ProductCategory; store?: string }): Observable<Product[]> {
-    // Just return the test users regardless of what filters are passed in
+    // Just return the test products regardless of what filters are passed in
     return of(MockProductService.testProducts);
+  }
+
+  override getGroupedProducts(filters?: { category?: ProductCategory; store?: string }): Observable<CategorySortItem[]> {
+    //just return the whole array of products regardless of filter
+    const output: CategorySortItem[] = [{
+      category: 'produce',
+      count: 1,
+      products: [MockProductService.testProducts[0]]
+    },
+    {
+      category: 'dairy',
+      count: 1,
+      products: [MockProductService.testProducts[2]]
+    },
+    {
+      category: 'baked goods',
+      count: 1,
+      products: [MockProductService.testProducts[1]]
+    }
+    ];
+
+    return of(output);
   }
 
   override getProductById(id: string): Observable<Product> {
@@ -81,25 +104,25 @@ export class MockProductService extends ProductService {
       return of(null);
     }
   }
-/*
-  override deleteProduct(id: string): Observable<boolean> {
-    for(let i = 0; i < MockProductService.testProducts.length; i++) {
-      if (id !== MockProductService.testProducts[i]._id) {return new Observable<false>();}
-    }
-    for(let j = 0; j < MockProductService.testProducts.length; j++) {
-      if (id === MockProductService.testProducts[j]._id) { MockProductService.testProducts.splice(j,1);}
+  /*
+    override deleteProduct(id: string): Observable<boolean> {
+      for(let i = 0; i < MockProductService.testProducts.length; i++) {
+        if (id !== MockProductService.testProducts[i]._id) {return new Observable<false>();}
+      }
+      for(let j = 0; j < MockProductService.testProducts.length; j++) {
+        if (id === MockProductService.testProducts[j]._id) { MockProductService.testProducts.splice(j,1);}
 
-  override deleteProduct(id: string): Observable<boolean> {
-    for(let i = 0; i < MockProductService.testProducts.length; i++) {
-      if (id !== MockProductService.testProducts[i]._id) {return new Observable<false>();}
-    }
-    for(let j = 0; j < MockProductService.testProducts.length; j++) {
-      if (id === MockProductService.testProducts[j]._id) { MockProductService.testProducts.splice(j,1);}
+    override deleteProduct(id: string): Observable<boolean> {
+      for(let i = 0; i < MockProductService.testProducts.length; i++) {
+        if (id !== MockProductService.testProducts[i]._id) {return new Observable<false>();}
+      }
+      for(let j = 0; j < MockProductService.testProducts.length; j++) {
+        if (id === MockProductService.testProducts[j]._id) { MockProductService.testProducts.splice(j,1);}
 
+      }
+      return new Observable<true>();
     }
-    return new Observable<true>();
-  }
- */
+   */
   override addProduct(newProduct: Product): Observable<string> {
     return of(MockProductService.testID);
   }

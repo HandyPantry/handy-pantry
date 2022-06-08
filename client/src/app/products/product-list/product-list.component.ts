@@ -93,10 +93,29 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.activeFilters = false;
       }
       this.groupedProducts = returnedProducts;
+      this.extractAllProducts();
       this.updateFilter();
-    });
+    }, err => {
+      console.error(err);
+    }
+    );
   }
 
+  /**
+   * @deprecated This method exists as a transition between the usage of
+   * getGroupedProducts() and getProductsFromServer().
+   */
+  extractAllProducts(): void {
+    this.serverFilteredProducts = [];
+    for (let category of this.groupedProducts) {
+      this.serverFilteredProducts = this.serverFilteredProducts.concat(category.products);
+    }
+  }
+
+
+  /**
+   * @deprecated Method no longer in use, use the getGroupedProductsFromServer() instead.
+   */
   getProductsFromServer(): void {
     this.unsub();
     this.getProductsSub = this.productService.getProducts({
@@ -110,7 +129,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.activeFilters = false;
       }
       this.serverFilteredProducts = returnedProducts;
-      this.initializeCategoryMap();
+      //this.initializeCategoryMap();
       this.updateFilter();
     }, err => {
       console.log(err);
@@ -176,7 +195,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     });
   }
 
-    // Pops up a dialog to add a product to the shoppinglist
+  // Pops up a dialog to add a product to the shoppinglist
   /* istanbul ignore next */
   openShoppinglistAddDialog(givenProduct: Product) {
     const dialogRef = this.dialog.open(AddProductToShoppinglistComponent, { data: givenProduct });
@@ -195,12 +214,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   // Pops up a dialog for increasing the count of an already existing product in shopping list
-    /* istanbul ignore next */
+  /* istanbul ignore next */
   openShoppinglistExistsDialog(givenProduct: Product) {
     this.dialog.open(ProductExistsInShoppinglistDialogComponent, { data: givenProduct });
   }
 
-    /* istanbul ignore next */
+  /* istanbul ignore next */
   showDialogByProductInShoppingList(givenProduct): void {
     this.shoppinglistService.productInShoppinglist(givenProduct._id).subscribe(
       data => {

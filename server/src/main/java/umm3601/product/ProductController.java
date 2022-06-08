@@ -117,7 +117,7 @@ public class ProductController {
         .aggregate(
             Arrays.asList(
                 Aggregates.match(combinedFilter),
-                Aggregates.sort(sortingOrder),
+                //Aggregates.sort(sortingOrder),
                 Aggregates.group("$category",
                     Accumulators.sum("count", 1),
                     Accumulators.addToSet("products",
