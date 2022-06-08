@@ -114,17 +114,17 @@ describe ('Delete button on Products From Product List', () => {
 
     // Filter products
     page.selectCategory('baking supplies');
-    cy.get('#product-name-input').type('Almon');
+    cy.get('#product-name-input').type('Almond');
 
     // Check that 'Coffee - Cafe Moreno' is the first product
     page.getFilteredProductListItems().first().within(($product) => {
-      cy.wrap($product).find('.product-list-name').should('contain.text', ' Almon ');
+      cy.wrap($product).find('.product-list-name').should('contain.text', ' Almond ');
     });
 
     // Grab and delete first one, 'Kahlua'
     page.clickDeleteButton();
     cy.get('.mat-dialog-content')
-      .should('contain.text', 'Remove Almon Paste, 8 Oz from your products?This action cannot be undone');
+      .should('contain.text', 'Remove Almond Paste, 8 Oz from your products?This action cannot be undone');
   });
 
   it('Should go to a product in an expansion tab and read the dialog', () => {
@@ -152,13 +152,13 @@ describe ('Add button on Products to Pantry List', () => {
 
     // Check that 'Kahlua' is the first product
     page.getFilteredProductListItems().first().within(($product) => {
-      cy.wrap($product).find('.product-list-name').should('contain.text', ' Almon ');
+      cy.wrap($product).find('.product-list-name').should('contain.text', ' Almond ');
     });
 
     // Grab and delete first one, 'Kahlua'
     page.clickAddButton();
     cy.get('.mat-dialog-title')
-      .should('contain.text', 'Add Almon Paste, 8 Oz to your Pantry');
+      .should('contain.text', 'Add Almond Paste, 8 Oz to your Pantry');
   });
 
   it('Should click the add to shoppinglist button for the first product from the filtered list and read the dialog popup', () => {
@@ -169,13 +169,13 @@ describe ('Add button on Products to Pantry List', () => {
 
     // Check that 'Kahlua' is the first product
     page.getFilteredProductListItems().first().within(($product) => {
-      cy.wrap($product).find('.product-list-name').should('contain.text', ' Almon ');
+      cy.wrap($product).find('.product-list-name').should('contain.text', ' Almond ');
     });
 
     // Grab and delete first one, 'Kahlua'
     page.clickAddShoppingButton();
     cy.get('.mat-dialog-title')
-      .should('contain.text', 'Add Almon Paste, 8 Oz to your Shopping List');
+      .should('contain.text', 'Add Almond Paste, 8 Oz to your Shopping List');
   });
 
   it('Should go to a product in an expansion tab, click add to pantry, and read the dialog', () => {

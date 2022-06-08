@@ -120,20 +120,7 @@ public class ProductController {
                 //Aggregates.sort(sortingOrder),
                 Aggregates.group("$category",
                     Accumulators.sum("count", 1),
-                    Accumulators.addToSet("products",
-                        new Document("_id", "$_id")
-                            .append("brand", "$brand")
-                            .append("description", "$description")
-                            .append("image", "$image")
-                            .append("category", "$category")
-                            .append("lifespan", "$lifespan")
-                            .append("location", "$location")
-                            .append("notes", "$notes")
-                            .append("productName", "$productName")
-                            .append("store", "$store")
-                            .append("tags", "$tags")
-                            .append("threshold", "$threshold"))
-                            ),
+                    Accumulators.addToSet("products", "$$ROOT")),
                 Aggregates.project(
                     Projections.fields(
                         Projections.computed("category", "$_id"),
