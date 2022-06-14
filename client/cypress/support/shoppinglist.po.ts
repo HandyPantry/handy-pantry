@@ -39,13 +39,33 @@ export class ShoppinglistPage {
     return cy.get('.store-tabs-group .mat-tab-body[role="tabpanel"]').eq(position);
   }
 
-  getStoreItems(position: number) {
-    this.getStoreProductsPanel(position);
+  /**
+   * Get all the items in the shopping list for the store at the
+   * specified position.
+   *
+   * @param storePosition The position in the tab group of the desired
+   * store; the left-most store is at position zero.
+   * @returns the list of all the shopping list items for that store
+   */
+  getStoreItems(storePosition: number) {
+    // Does this next line actually _do_ anything? We don't capture
+    // the return value or act on it, so if it does do anything, it's
+    // entirely via side-effects, which at a minimum means that the
+    // name of `getStoreProductsPanel()` is dodgy.
+    this.getStoreProductsPanel(storePosition);
     return cy.get('.shopping-list-item');
   }
 
-  clickDeleteButton(num: number) {
-    return this.getStoreItems(num).first().within(($item) => {
+  /**
+   * Delete the first shopping list item for the store in the
+   * specified position in the tab group. This finds the first item
+   * for that store, and clicks the delete button for that item.
+   *
+   * @param storePosition The position in the tab group of the desired
+   * store; the left-most store is at position zero.
+   */
+  deleteFirstItemInStore(storePosition: number) {
+    return this.getStoreItems(storePosition).first().within((_$item) => {
       cy.get('[data-test=deleteItemButton]')
         .click();
     });
