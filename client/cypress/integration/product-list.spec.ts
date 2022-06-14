@@ -243,6 +243,7 @@ describe('Product already in shopping list add button', () => {
     page.clickExpansionAddShoppingButton('baking supplies');
     cy.wait(1000);
     page.clickDialogGoToShoppingButton();
+    cy.wait(1000);
     page.getUrl().should('be.equal', 'http://localhost:4200/shoppinglist#');
   });
 
