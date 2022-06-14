@@ -89,10 +89,37 @@ describe('Delete from Shopping List', () => {
     cy.wait(1000);
   });
 
-  it('should click the delete button on an item and confirm delete', () => {
-    page.clickDeleteButton(0);
-    page.clickDialogDeleteButton();
-    page.getStoreItems(0).should('have.length', 3);
-  });
+  describe('Deleting from the left-most store', () => {
+    const storePos = 0;
+    let originalNumItems: number;
 
+    beforeEach(() => {
+      // Is this really a reasonable way to do this?
+      // I got the idea from https://stackoverflow.com/a/68815811
+      // and it seems to work, but I'm not super sold on it.
+      // I don't really like that we have to have this beforeEach
+      // to capture the previous value. I'm also not sure how or if we
+      // know that the `then` here will actually have run
+      // before we start the next `it`. If doesn't, then we could
+      // get race conditions where sometimes `originalNumItems` is
+      // properly initialized, and sometimes it isn't. – Nic
+      page.getStoreItems(storePos)
+          .its('length')
+          .then(len => originalNumItems = len);
+    });
+
+    it('Clicking the delete button on the first item should reduce the number of items by one', () => {
+      console.log(originalNumItems);
+      page.deleteFirstItemInStore(storePos);
+      page.clickDialogDeleteButton();
+      console.log(originalNumItems);
+      page.getStoreItems(storePos).should('have.length', originalNumItems-1);
+    });
+
+    // TODO:
+    //   - Test for deleting something other than only the first
+    //     item in a given store's shopping list.
+    //   - Test for deleting something from something other than
+    //     the first (left-most) store.
+  });
 });
