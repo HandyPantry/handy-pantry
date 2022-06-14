@@ -49,7 +49,7 @@ describe ('Edit Product', () => {
     page.editProductButton().should('be.enabled');
     page.getFormField('productName').should('have.value', testProductToEdit.productName);
     page.getFormField('brand').should('have.value', testProductToEdit.brand);
-    page.getFormField('store').should('have.value', testProductToEdit.store);
+    page.selectMatSelectValue(cy.get('[formControlName=store]'), testProductToEdit.store);
     page.selectMatSelectValue(cy.get('[formControlName=category]'), testProductToEdit.category);
     cy.wait(1000);
     page.getFormField('description').should('have.value', testProductToEdit.description);
