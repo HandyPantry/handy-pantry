@@ -30,7 +30,7 @@ describe('Interactive Shoppinglist', () => {
   });
 
   // We probably want to delete `getStoreTab()` since that's pretty
-  // fragile by position, and switch everthing to using `getStoreTabByName()`
+  // fragile by position, and switch everything to using `getStoreTabByName()`
   // instead. TBH, I'm not thrilled about getting them by name (lots of things
   // will break when we fix the spelling of "Willie's", for example), but
   // I can't figure out how to propagate `data-test` attributes through a
