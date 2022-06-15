@@ -122,11 +122,33 @@ describe('Delete from Shopping List', () => {
     });
 
     it('Clicking the delete button on the first item should reduce the number of items by one', () => {
-      console.log(originalNumItems);
       page.deleteFirstItemInStore(storePos);
       page.clickDialogDeleteButton();
-      console.log(originalNumItems);
       page.getStoreItems(storePos).should('have.length', originalNumItems-1);
+    });
+
+    // TODO:
+    //   - Test for deleting something other than only the first
+    //     item in a given store's shopping list.
+    //   - Test for deleting something from something other than
+    //     the first (left-most) store.
+  });
+
+  describe('Deleting from RealFoodHub', () => {
+    const storeName = 'RealFoodHub';
+    let originalNumItems: number;
+
+    beforeEach(() => {
+      page.getStoreItemsByName(storeName)
+        .its('length')
+        .then(len => originalNumItems = len);
+    });
+
+    it('Clicking the delete button on the first item should reduce the number of items by one', () => {
+      page.deleteFirstItemInStoreByName(storeName);
+      page.clickDialogDeleteButton();
+      console.log(originalNumItems);
+      page.getStoreItemsByName(storeName).should('have.length', originalNumItems - 1);
     });
 
     // TODO:
