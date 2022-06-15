@@ -61,6 +61,9 @@ export class ShoppinglistPage {
    * @param storePosition The position in the tab group of the desired
    * store; the left-most store is at position zero.
    * @returns the list of all the shopping list items for that store
+   *
+   * @deprecated We should stop using this since it will totally break
+   * if/when we change the ordering of the stores in the tab group.
    */
   getStoreItems(storePosition: number) {
     // Does this next line actually _do_ anything? We don't capture
@@ -72,15 +75,49 @@ export class ShoppinglistPage {
   }
 
   /**
+   * Get all the items in the shopping list for the store with the
+   * specified name.
+   *
+   * @param storeName The name of the desired store.
+   * @returns the list of all the shopping list items for that store
+   */
+  getStoreItemsByName(storeName: string) {
+    // Does this next line actually _do_ anything? We don't capture
+    // the return value or act on it, so if it does do anything, it's
+    // entirely via side-effects, which at a minimum means that the
+    // name of `getStoreProductsPanel()` is dodgy.
+    // this.getStoreProductsPanel(storePosition);
+    this.getStoreTabByName(storeName).click();
+    return cy.get('.shopping-list-item');
+  }
+
+  /**
    * Delete the first shopping list item for the store in the
    * specified position in the tab group. This finds the first item
    * for that store, and clicks the delete button for that item.
    *
    * @param storePosition The position in the tab group of the desired
    * store; the left-most store is at position zero.
+   *
+   * @deprecated We should stop using this since it will totally break
+   * if/when we change the ordering of the stores in the tab group.
    */
   deleteFirstItemInStore(storePosition: number) {
     return this.getStoreItems(storePosition).first().within((_$item) => {
+      cy.get('[data-test=deleteItemButton]')
+        .click();
+    });
+  }
+
+  /**
+   * Delete the first shopping list item for the store with the
+   * specified name in the tab group. This finds the first item
+   * for that store, and clicks the delete button for that item.
+   *
+   * @param storeName The name of the desired store.
+   */
+  deleteFirstItemInStoreByName(storeName: string) {
+    return this.getStoreItemsByName(storeName).first().within((_$item) => {
       cy.get('[data-test=deleteItemButton]')
         .click();
     });
