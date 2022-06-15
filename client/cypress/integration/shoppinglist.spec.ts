@@ -29,11 +29,24 @@ describe('Interactive Shoppinglist', () => {
     page.changeView('interactive');
   });
 
+  // We probably want to delete `getStoreTab()` since that's pretty
+  // fragile by position, and switch everthing to using `getStoreTabByName()`
+  // instead. TBH, I'm not thrilled about getting them by name (lots of things
+  // will break when we fix the spelling of "Willie's", for example), but
+  // I can't figure out how to propagate `data-test` attributes through a
+  // `mat-tab` element from Angular Material.
   it('Should have store tabs', () => {
     page.getStoreTab(0).should('exist').and('have.text', 'Other Store');
     page.getStoreTab(1).should('exist').and('have.text', 'Pomme de Terre');
     page.getStoreTab(2).should('exist').and('have.text', 'RealFoodHub');
     page.getStoreTab(3).should('exist').and('have.text', 'Willies');
+  });
+
+  it('Should have store tabs by name', () => {
+    page.getStoreTabByName('Other Store').should('exist');
+    page.getStoreTabByName('Willies');
+    page.getStoreTabByName('Pomme de Terre');
+    page.getStoreTabByName('RealFoodHub');
   });
 
   it('Should have products', () => {

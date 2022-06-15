@@ -1,4 +1,3 @@
-
 export class ShoppinglistPage {
 
   navigateTo() {
@@ -22,12 +21,28 @@ export class ShoppinglistPage {
   }
 
   /**
-   * Get the store tabs on the interactive shoppinglist
+   * Get the specified store tab from the interactive shoppinglist
    *
-   * @param position the order of the store tab (first tab is '0')
+   * @param position the position of the desired store tab (first, left-most, tab is '0')
+   * @returns the tab element for the specified position
+   *
+   * @deprecated We should stop using this since it will totally break if/when we
+   * rearrange the order of the stores in the tab group. Calls to this should be
+   * replaced with calls to `getStoreTabByName()` (or something even better).
    */
+
   getStoreTab(position: number) {
     return cy.get('.store-tabs-group .mat-tab-labels div[role="tab"]').eq(position);
+  }
+
+  /**
+   * Get the specified store tab from the interactive shoppinglist
+   *
+   * @param name the name of the store for the desired store tab
+   * @returns the tab element for the specified store name
+   */
+  getStoreTabByName(name: string) {
+    return cy.get('.store-tabs-group .mat-tab-labels div[role="tab"]').contains(name);
   }
 
   /**
@@ -52,7 +67,7 @@ export class ShoppinglistPage {
     // the return value or act on it, so if it does do anything, it's
     // entirely via side-effects, which at a minimum means that the
     // name of `getStoreProductsPanel()` is dodgy.
-    this.getStoreProductsPanel(storePosition);
+    // this.getStoreProductsPanel(storePosition);
     return cy.get('.shopping-list-item');
   }
 
