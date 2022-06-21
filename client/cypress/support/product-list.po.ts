@@ -34,7 +34,7 @@ export class ProductListPage {
     // Find and click the drop down
     return cy.get('[data-test=productCategorySelect]').click()
              // Select and click the desired value from the resulting menu
-             .get(`mat-option[ng-reflect-value="${value}"]`).click();
+             .get(`mat-option[ng-reflect-value="${value}"]`).should('be.visible').click();
   }
 
   /**
@@ -122,7 +122,7 @@ export class ProductListPage {
   }
 
   enterCount(count: number) {
-    return cy.get('[data-test=countInput]').type(`${count}`);
+    return cy.get('[data-test=countInput]').should('be.visible').type(`${count}`);
   }
 
   clickDialogAddButton() {
