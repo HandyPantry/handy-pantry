@@ -103,9 +103,9 @@ export class ProductListPage {
   }
 
   clickExpansionAddShoppingButton(category: string) {
-    return cy.get('.' + category.replace(' ', '-') + '-expansion-panel')
+    return cy.get(`.${category.replace(' ', '-')}-expansion-panel`)
       .click()
-      .get('.' + category.replace(' ', '-') + '-nav-list')
+      .get(`.${category.replace(' ', '-')}-nav-list`)
       .first()
       .within(($product) => {
         cy.get('[data-test=addToShoppinglistButton]')
@@ -121,8 +121,8 @@ export class ProductListPage {
     return cy.get('[data-test=notesInput]').type(notes);
   }
 
-  enterCount(notes: string) {
-    return cy.get('[data-test=countInput]').type(notes);
+  enterCount(count: number) {
+    return cy.get('[data-test=countInput]').type(`${count}`);
   }
 
   clickDialogAddButton() {
@@ -130,14 +130,26 @@ export class ProductListPage {
   }
 
   clickDialogAddShoppingButton() {
-    return cy.get('[data-test=confirmAddProductToShoppinglistButton]').click();
+    return cy.get('[data-test=confirmAddProductToShoppinglistButton]').click({ force: true });
   }
 
   clickDialogGoToShoppingButton() {
-    return cy.get('[data-test=goToShoppingListButton]').click();
+    return cy.get('[data-test=goToShoppingListButton]').click({ force: true });
   }
 
   clickDialogDeleteButton() {
     return cy.get('[data-test=dialogDelete]').click();
+  }
+
+  getAddProductFormField(fieldName: string) {
+    return cy.get(`mat-form-field [formControlName=${fieldName}]`);
+  }
+
+  selectMatSelectValue(select: Cypress.Chainable, value: string) {
+    return select.click().get(`mat-option[value="${value}"]`).click();
+  }
+
+  addProductSubmitButton() {
+    return cy.get('[data-test="confirmProductButton"]');
   }
 }

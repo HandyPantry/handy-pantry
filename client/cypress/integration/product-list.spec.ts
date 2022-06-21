@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import { ProductListPage } from '../support/product-list.po';
+import { Product } from 'src/app/products/product';
 
 const page = new ProductListPage();
 
@@ -17,7 +18,6 @@ describe ('Product List', () => {
   });
 
   it('Should type something in the Product Name filter and check that it returned correct elements', () => {
-    // Filter for product 'Muffin'
     cy.get('#product-name-input').type('Salmon');
 
     // All of the product list items should have the name we are filtering by
@@ -148,9 +148,8 @@ describe ('Add button on Products to Pantry List', () => {
 
     // Filter products
     page.selectCategory('baking supplies');
-    cy.get('#product-name-input').type('Almon');
+    cy.get('#product-name-input').type('Almond');
 
-    // Check that 'Kahlua' is the first product
     page.getFilteredProductListItems().first().within(($product) => {
       cy.wrap($product).find('.product-list-name').should('contain.text', ' Almond ');
     });
@@ -222,7 +221,7 @@ describe ('Add Product to Shopping List', () => {
   it('should enter the count of a shoppinglist item then click the button', () => {
     page.clickExpansionAddShoppingButton('toiletries');
     cy.wait(600);
-    page.enterCount('1');
+    page.enterCount(1);
     page.clickDialogAddShoppingButton();
     cy.get('.mat-simple-snack-bar-content')
     .should('contain.text', 'successfully added to your Shopping List.');
@@ -240,10 +239,52 @@ describe('Product already in shopping list add button', () => {
 
   // Product already in shopping list
   it('should click the add button, then click the button to go to the shopping list page', () => {
-    page.clickExpansionAddShoppingButton('baking supplies');
-    cy.wait(1000);
+    const testNewProduct: Product = {
+      _id: 'testID',
+      productName: 'Frog Legs',
+      brand: 'Marsh  Inc.',
+      category: 'produce',
+      description: 'A rare delicacy.',
+      image: '',
+      lifespan: 4,
+      location: 'Aisle 1',
+      notes: 'For testing only',
+      store: 'Pom de Terre',
+      tags: [],
+      threshold: 4
+    };
+
+    //First, add a new product to the product list (so we know it's not already in the shopping list)
+    cy.visit('/products/new');
+
+    page.getAddProductFormField('productName').type(testNewProduct.productName);
+    page.getAddProductFormField('brand').type(testNewProduct.brand);
+    page.getAddProductFormField('store').type(testNewProduct.store);
+    page.getAddProductFormField('location').type(testNewProduct.location);
+    page.selectMatSelectValue(cy.get('[formControlName=category]'), testNewProduct.category);
+
+    page.addProductSubmitButton().click();
+
+    page.navigateTo();
+
+    cy.get('#product-name-input').type(testNewProduct.productName);
+
+    page.getFilteredProductListItems().first().within(($product) => {
+      cy.get('[data-test=addToShoppinglistButton]').click();
+    });
+    //Should open the add to Shopping List Dialog Here
+    cy.get('[data-test=addToShoppingListDialogTitle]').should('contain.text', testNewProduct.productName);
+    page.enterCount(1);
+    page.clickDialogAddShoppingButton();
+    cy.get('.mat-simple-snack-bar-content')
+    .should('contain.text', 'successfully added to your Shopping List.');
+    cy.wait(5100);
+    //When we try to add the item to the shopping list, should open the "Product Already in Shopping List"
+    page.getFilteredProductListItems().first().within(($product) => {
+      cy.get('[data-test=addToShoppinglistButton]').click();
+    });
+    cy.get('[data-test=productAlreadyInShoppingListDialogTitle]').should('contain.text', testNewProduct.productName);
     page.clickDialogGoToShoppingButton();
-    cy.wait(1000);
     page.getUrl().should('be.equal', 'http://localhost:4200/shoppinglist#');
   });
 
