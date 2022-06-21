@@ -148,7 +148,7 @@ describe ('Add button on Products to Pantry List', () => {
 
     // Filter products
     page.selectCategory('baking supplies');
-    cy.get('#product-name-input').type('Almon');
+    cy.get('#product-name-input').type('Almond');
 
     // Check that 'Kahlua' is the first product
     page.getFilteredProductListItems().first().within(($product) => {
@@ -165,7 +165,7 @@ describe ('Add button on Products to Pantry List', () => {
 
     // Filter products
     page.selectCategory('baking supplies');
-    cy.get('#product-name-input').type('Almon');
+    cy.get('#product-name-input').type('Almond');
 
     // Check that 'Kahlua' is the first product
     page.getFilteredProductListItems().first().within(($product) => {
@@ -257,7 +257,7 @@ describe('Delete from Product List', () => {
   it('should click the delete button on a product and confirm delete', () => {
     page.clickExpansionDeleteButton('staples');
     page.clickDialogDeleteButton();
-    cy.get('.mat-simple-snack-bar-content').should('contain.text', 'Chicken Instant Buillion Cubes, 92 g successfully deleted.');
+    cy.get('.mat-simple-snack-bar-content').should('contain.text', 'Chicken Instant Bullion Cubes, 92 g successfully deleted.');
   });
 
   it('should remove instances from the pantry and the shopping list.', () => {
