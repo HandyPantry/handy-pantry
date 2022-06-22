@@ -32,9 +32,9 @@ export class ProductListPage {
    */
   selectCategory(value: ProductCategory) {
     // Find and click the drop down
-    return cy.get('[data-test=productCategorySelect]').click()
-             // Select and click the desired value from the resulting menu
-             .get(`mat-option[ng-reflect-value="${value}"]`).should('be.visible').click();
+    return cy.get('[data-test=productCategorySelect]').click({ force: true})
+      // Select and click the desired value from the resulting menu
+      .get(`mat-option[ng-reflect-value="${value}"]`).should('exist').click({ force: true});
   }
 
   /**
