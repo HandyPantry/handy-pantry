@@ -11,7 +11,7 @@ const testProductToAdd: Product = {
   lifespan: 4,
   location: 'Florida',
   notes: 'A tropical fruit',
-  store: 'Pom de Terre',
+  store: 'Pomme de Terre',
   tags: [],
   threshold: 4
 };
@@ -31,7 +31,7 @@ describe('Add Product', () => {
     page.addProductButton().should('be.disabled');
     page.getFormField('productName').type('Apples');
     page.getFormField('brand').type('Minnesotan');
-    page.getFormField('store').type('Willies');
+    page.selectMatSelectValue(cy.get('[formControlName=store]'), 'Willies');
     page.getFormField('location').type('Aisle 10');
     page.selectMatSelectValue(cy.get('[formControlName=category]'), 'produce');
 
