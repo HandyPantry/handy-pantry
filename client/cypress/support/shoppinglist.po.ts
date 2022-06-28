@@ -42,7 +42,9 @@ export class ShoppinglistPage {
    * @returns the tab element for the specified store name
    */
   getStoreTabByName(name: string) {
-    return cy.get('.store-tabs-group .mat-tab-labels div[role="tab"]').contains(name);
+    const tab = cy.get('.store-tabs-group .mat-tab-labels div[role="tab"]').contains(name);
+    tab.should('have.length', 1);
+    return tab;
   }
 
   /**
@@ -86,8 +88,8 @@ export class ShoppinglistPage {
     // the return value or act on it, so if it does do anything, it's
     // entirely via side-effects, which at a minimum means that the
     // name of `getStoreProductsPanel()` is dodgy.
-    // this.getStoreProductsPanel(storePosition);
     this.getStoreTabByName(storeName).click();
+    cy.wait(1000);
     return cy.get('.shopping-list-item');
   }
 
@@ -124,7 +126,8 @@ export class ShoppinglistPage {
   }
 
   clickDialogDeleteButton() {
-    return cy.get('[data-test=dialogDelete]').click();
+    cy.get('[data-test=dialogDelete]').click();
+    cy.get('[data-test=dialogDelete]').should('not.exist');
   }
 
   /**

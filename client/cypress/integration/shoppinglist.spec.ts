@@ -134,8 +134,8 @@ describe('Delete from Shopping List', () => {
     //     the first (left-most) store.
   });
 
-  describe('Deleting from RealFoodHub', () => {
-    const storeName = 'RealFoodHub';
+  describe('Deleting from Pomme de Terre', () => {
+    const storeName = 'Pomme de Terre';
     let originalNumItems: number;
 
     beforeEach(() => {
@@ -145,8 +145,13 @@ describe('Delete from Shopping List', () => {
     });
 
     it('Clicking the delete button on the first item should reduce the number of items by one', () => {
+      console.log(originalNumItems);
       page.deleteFirstItemInStoreByName(storeName);
       page.clickDialogDeleteButton();
+      // Add a SnackBar to the UI, and then I can wait for it to appear and disappear
+      // before moving on? I also need to look at how this page redraws after deletion
+      // to see how icky that is.
+      cy.wait(1000);
       console.log(originalNumItems);
       page.getStoreItemsByName(storeName).should('have.length', originalNumItems - 1);
     });
