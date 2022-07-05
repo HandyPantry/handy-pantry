@@ -121,8 +121,12 @@ export class ProductListPage {
     return cy.get('[data-test=notesInput]').type(notes);
   }
 
-  enterCount(notes: string) {
-    return cy.get('[data-test=countInput]').type(notes);
+  enterPantryQuantity(quantity: string) {
+    return cy.get('[data-test=pantryQuantityInput]').type(quantity);
+  }
+
+  enterShoppingListCount(count: string) {
+    return cy.get('[data-test=shoppingListCountInput]').type(count);
   }
 
   clickDialogAddButton() {

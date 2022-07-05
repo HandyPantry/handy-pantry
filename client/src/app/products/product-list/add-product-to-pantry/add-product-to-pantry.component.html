@@ -4,16 +4,44 @@
   <mat-form-field appearance="fill">
     <mat-label>Date Added to Pantry</mat-label>
     <input matInput [matDatepicker]="picker" formControlName="purchase_date" data-test="date-picker-button"
-                  required>
-                  <mat-hint>DD/MM/YYYY</mat-hint>
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
+      required>
+    <mat-hint>DD/MM/YYYY</mat-hint>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngFor="let validation of addPantryValidationMessages.purchase_date">
+      <mat-error class="error-message"
+                *ngIf="addToPantryForm.get('purchase_date').hasError(validation.type) && (addToPantryForm.get('purchase_date').dirty || addToPantryForm.get('purchase_date').touched)">
+        {{validation.message}}
+      </mat-error>
+    </mat-error>
   </mat-form-field>
+
   <br>
+
   <mat-form-field appearance="fill">
     <mat-label>Pantry Item Notes</mat-label>
-    <input matInput placeholder="Pantry Item Notes" data-test="notesInput" formControlName="notes" required>
+    <input matInput placeholder="Pantry Item Notes" data-test="notesInput" formControlName="notes">
+    <mat-error *ngFor="let validation of addPantryValidationMessages.notes">
+      <mat-error class="error-message"
+                *ngIf="addToPantryForm.get('notes').hasError(validation.type) && (addToPantryForm.get('notes').dirty || addToPantryForm.get('notes').touched)">
+        {{validation.message}}
+      </mat-error>
+    </mat-error>
   </mat-form-field>
+
+  <br>
+
+  <mat-form-field apearence="fill">
+    <mat-label>Quantity</mat-label>
+    <input matInput type="number" placeholder="Number of items to add" data-test="pantryQuantityInput"
+      formControlName="quantity" required>
+  </mat-form-field>
+  <mat-error *ngFor="let validation of addPantryValidationMessages.quantity">
+    <mat-error class="error-message"
+              *ngIf="addToPantryForm.get('quantity').hasError(validation.type) && (addToPantryForm.get('quantity').dirty || addToPantryForm.get('quantity').touched)">
+      {{validation.message}}
+    </mat-error>
+  </mat-error>
 </mat-dialog-content>
 
 <mat-dialog-actions>
