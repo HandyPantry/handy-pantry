@@ -50,7 +50,7 @@ describe ('Product List', () => {
 
     // All of the product list items that show should have the store we are looking for
     page.getFilteredProductListItems().each($product => {
-      cy.wrap($product).find('.product-list-store').should('have.text', ' Willies, Aisle 4 ');
+      cy.wrap($product).find('.product-list-store').should('contain.text', ' Willies');
     });
   });
 
@@ -164,7 +164,7 @@ describe ('Add button on Products to Pantry List', () => {
 
     // Filter products
     page.selectCategory('baking supplies');
-    cy.get('#product-name-input').type('Almon');
+    cy.get('#product-name-input').type('Almond');
 
     // Check that 'Kahlua' is the first product
     page.getFilteredProductListItems().first().within(($product) => {

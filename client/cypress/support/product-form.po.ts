@@ -50,8 +50,7 @@ export class ProductFormPage {
     this.getFormField('productName').type(productData.productName);
     this.getFormField('brand').clear();
     this.getFormField('brand').type(productData.brand);
-    this.getFormField('store').clear();
-    this.getFormField('store').type(productData.store);
+    this.selectMatSelectValue(cy.get('[formControlName=store]'), productData.store);
     this.selectMatSelectValue(cy.get('[formControlName=category]'), productData.category);
 
     if (productData.description) {
