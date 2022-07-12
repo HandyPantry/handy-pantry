@@ -26,15 +26,15 @@ export class ProductListPage {
   }
 
   /**
-   * Selects a category to filter in the "Category" selector.
-   *
-   * @param value The category *value* to select, this is what's found in the mat-option "value" attribute.
-   */
+    * Selects a category to filter in the "Category" selector.
+    *
+    * @param value The category *value* to select, this is what's found in the mat-option "value" attribute.
+  */
   selectCategory(value: ProductCategory) {
     // Find and click the drop down
-    return cy.get('[data-test=productCategorySelect]').click({ force: true})
+    return cy.get('[data-test=productCategorySelect]').click()
       // Select and click the desired value from the resulting menu
-      .get(`mat-option[ng-reflect-value="${value}"]`).should('exist').click({ force: true});
+      .get(`mat-option`).contains(value, { matchCase: false }).click({ force: true });
   }
 
   /**
@@ -46,7 +46,7 @@ export class ProductListPage {
     // Find and click the drop down
     return cy.get('[data-test=productStoreSelect]').click()
       // Select and click the desired value from the resulting menu
-      .get(`mat-option[ng-reflect-value="${value}"]`).click();
+      .get(`mat-option`).contains(value).click({ force: true });
   }
 
   addProductButton() {

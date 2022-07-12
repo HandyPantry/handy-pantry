@@ -112,7 +112,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
     }
   }
 
-
   /**
    * @deprecated Method no longer in use, use the getGroupedProductsFromServer() instead.
    */
@@ -129,7 +128,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.activeFilters = false;
       }
       this.serverFilteredProducts = returnedProducts;
-      //this.initializeCategoryMap();
       this.updateFilter();
     }, err => {
       console.log(err);
@@ -141,9 +139,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     for (let givenCategory of this.categoriesList) {
       this.categoryNameMap.set(givenCategory,
         this.productService.filterProducts(this.serverFilteredProducts, { category: givenCategory }));
-
     }
-    console.log(this.categoryNameMap);
   }
 
 

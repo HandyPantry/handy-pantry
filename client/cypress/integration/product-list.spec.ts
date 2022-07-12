@@ -60,7 +60,7 @@ describe ('Product List', () => {
     page.selectCategory('miscellaneous');
 
     // Some of the products should be listed
-    page.getFilteredProductListItems().should('exist');
+    page.getFilteredProductListItems().should('be.visible');
 
     // All of the product list items that show should have the store we are looking for
     page.getFilteredProductListItems().each($product => {
@@ -220,7 +220,6 @@ describe ('Add Product to Shopping List', () => {
 
   it('should enter the count of a shoppinglist item then click the button', () => {
     page.clickExpansionAddShoppingButton('toiletries');
-    cy.wait(600);
     page.enterCount(1);
     page.clickDialogAddShoppingButton();
     cy.get('.mat-simple-snack-bar-content')

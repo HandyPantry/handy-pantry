@@ -111,13 +111,12 @@ public class ProductController {
 
   public void groupProductsByCategory(Context ctx) {
     Bson combinedFilter = constructFilter(ctx);
-    Bson sortingOrder = constructSortingOrder(ctx);
 
     ArrayList<CategorySortItem> output = productCollection
         .aggregate(
             Arrays.asList(
                 Aggregates.match(combinedFilter),
-                //Aggregates.sort(sortingOrder),
+                Aggregates.sort(Sorts.ascending("productName")),
                 Aggregates.group("$category",
                     Accumulators.sum("count", 1),
                     Accumulators.addToSet("products", "$$ROOT")),
@@ -126,9 +125,19 @@ public class ProductController {
                         Projections.computed("category", "$_id"),
                         Projections.include("count", "products"),
                         Projections.excludeId())),
-                Aggregates.sort(Sorts.ascending("_id"))),
+                Aggregates.sort(Sorts.ascending("category"))),
             CategorySortItem.class)
         .into(new ArrayList<>());
+
+    // For each product category, this sorts the list of products in that
+    // category by the product name.
+    // It would be nice to figure out how to have Mongo do this internal
+    // sorting for us, but this works for now.
+    output.forEach(categoryEntry -> {
+      categoryEntry.products.sort((first, second) -> {
+        return first.productName.compareTo(second.productName);
+      });
+    });
 
     ctx.json(output);
 
@@ -140,12 +149,6 @@ public class ProductController {
     if (ctx.queryParamMap().containsKey(PRODUCT_NAME_KEY)) {
       filters.add(regex(PRODUCT_NAME_KEY, Pattern.quote(ctx.queryParam(PRODUCT_NAME_KEY)), "i"));
     }
-    /*
-     * if (ctx.queryParamMap().containsKey(DESCRIPTION_KEY)) {
-     * filters.add(regex(DESCRIPTION_KEY,
-     * Pattern.quote(ctx.queryParam(DESCRIPTION_KEY)), "i"));
-     * }
-     */
 
     if (ctx.queryParamMap().containsKey(BRAND_KEY)) {
       filters.add(regex(BRAND_KEY, Pattern.quote(ctx.queryParam(BRAND_KEY)), "i"));
