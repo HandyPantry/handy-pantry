@@ -213,7 +213,7 @@ describe ('Add Product to Pantry List', () => {
     page.enterNotes('This is a test');
     page.enterPantryQuantity('20');
     page.clickDialogAddButton();
-    cy.get('.mat-simple-snack-bar-content').should('contain.text', '20 Whole Milk, 1/2 gal successfully added to your pantry.');
+    cy.get('.mat-simple-snack-bar-content').should('be.visible').should('contain.text', '20 Whole Milk, 1/2 gal successfully added to your pantry.');
   });
 });
 
@@ -280,7 +280,7 @@ describe('Product already in shopping list add button', () => {
     });
     //Should open the add to Shopping List Dialog Here
     cy.get('[data-test=addToShoppingListDialogTitle]').should('contain.text', testNewProduct.productName);
-    page.enterCount(1);
+    page.enterShoppingListCount('1');
     page.clickDialogAddShoppingButton();
     cy.get('.mat-simple-snack-bar-content')
     .should('contain.text', 'successfully added to your Shopping List.');

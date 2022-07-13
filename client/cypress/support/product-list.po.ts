@@ -117,7 +117,7 @@ export class ProductListPage {
   }
 
   enterPantryQuantity(quantity: string) {
-    return cy.get('[data-test=pantryQuantityInput]').type(quantity);
+    return cy.get('[data-test=pantryQuantityInput]').clear().type(quantity);
   }
 
   enterShoppingListCount(count: string) {
