@@ -205,9 +205,16 @@ describe ('Add Product to Pantry List', () => {
     page.clickExpansionAddButton('dairy');
     page.enterNotes('This is a test');
     page.clickDialogAddButton();
-    cy.get('.mat-simple-snack-bar-content').should('contain.text', 'successfully added to your pantry.');
+    cy.get('.mat-simple-snack-bar-content').should('contain.text', '1 Whole Milk, 1/2 gal successfully added to your pantry.');
   });
 
+  it('should add several copies of the product to the pantry', () => {
+    page.clickExpansionAddButton('dairy');
+    page.enterNotes('This is a test');
+    page.enterPantryQuantity('20');
+    page.clickDialogAddButton();
+    cy.get('.mat-simple-snack-bar-content').should('contain.text', '20 Whole Milk, 1/2 gal successfully added to your pantry.');
+  });
 });
 
 describe ('Add Product to Shopping List', () => {
@@ -220,7 +227,7 @@ describe ('Add Product to Shopping List', () => {
 
   it('should enter the count of a shoppinglist item then click the button', () => {
     page.clickExpansionAddShoppingButton('toiletries');
-    page.enterCount(1);
+    page.enterShoppingListCount('1');
     page.clickDialogAddShoppingButton();
     cy.get('.mat-simple-snack-bar-content')
     .should('contain.text', 'successfully added to your Shopping List.');

@@ -5,9 +5,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, } from '@angular/material/dialog';
 import { Product, ProductCategory } from '../product';
 import { ProductService } from '../product.service';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { PantryService } from 'src/app/pantry/pantry.service';
-import { AddProductToPantryComponent } from './add-product-to-pantry/add-product-to-pantry.component';
+import { AddProductToPantryComponent, AddProductToPantryDialogOutput } from './add-product-to-pantry/add-product-to-pantry.component';
 import { DialogDeleteComponent } from './dialog-delete/dialog-delete.component';
 import { AddProductToShoppinglistComponent } from './add-product-to-shoppinglist/add-product-to-shoppinglist.component';
 // eslint-disable-next-line max-len
@@ -177,14 +177,19 @@ export class ProductListComponent implements OnInit, OnDestroy {
   /* istanbul ignore next */
   openPantryAddDialog(givenProduct: Product) {
     const dialogRef = this.dialog.open(AddProductToPantryComponent, { data: givenProduct });
-    dialogRef.afterClosed().subscribe(result => {
-      this.pantryService.addPantryItem(result).subscribe(newPantryId => {
-        if (newPantryId) {
-          this.snackBar.open(`${givenProduct.productName} successfully added to your pantry.`,
+    dialogRef.afterClosed().subscribe((result: AddProductToPantryDialogOutput) => {
+      const { quantity, ...pantryItem } = result;
+      const allItemsToAdd = Array(quantity).fill(pantryItem);
+
+      const requests = allItemsToAdd.map(item => this.pantryService.addPantryItem(item));
+
+      forkJoin(requests).subscribe(newPantryIds => {
+        if (newPantryIds.every(id => id)) {
+          this.snackBar.open(`${quantity} ${givenProduct.productName} successfully added to your pantry.`,
             'OK', { duration: 5000 });
         }
         else {
-          this.snackBar.open('Something went wrong.  The product was not added to the pantry.',
+          this.snackBar.open(`Something went wrong.  At least one ${givenProduct.productName} was not added to the pantry.`,
             'OK', { duration: 5000 });
         }
       });
