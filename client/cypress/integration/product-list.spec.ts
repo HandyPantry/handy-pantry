@@ -248,7 +248,7 @@ describe('Product already in shopping list add button', () => {
       lifespan: 4,
       location: 'Aisle 1',
       notes: 'For testing only',
-      store: 'Pom de Terre',
+      store: 'Pomme de Terre',
       tags: [],
       threshold: 4
     };
@@ -258,7 +258,7 @@ describe('Product already in shopping list add button', () => {
 
     page.getAddProductFormField('productName').type(testNewProduct.productName);
     page.getAddProductFormField('brand').type(testNewProduct.brand);
-    page.getAddProductFormField('store').type(testNewProduct.store);
+    page.selectMatSelectValue(cy.get('[formControlName=store]'), testNewProduct.store);
     page.getAddProductFormField('location').type(testNewProduct.location);
     page.selectMatSelectValue(cy.get('[formControlName=category]'), testNewProduct.category);
 

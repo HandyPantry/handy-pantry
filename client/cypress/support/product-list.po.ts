@@ -25,11 +25,6 @@ export class ProductListPage {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel .' + category.replace(' ', '-') + '-nav-list');
   }
 
-  /**
-    * Selects a category to filter in the "Category" selector.
-    *
-    * @param value The category *value* to select, this is what's found in the mat-option "value" attribute.
-  */
   selectCategory(value: ProductCategory) {
     // Find and click the drop down
     return cy.get('[data-test=productCategorySelect]').click()
