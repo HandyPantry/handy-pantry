@@ -1,4 +1,3 @@
-
 export class ShoppinglistPage {
 
   navigateTo() {
@@ -22,12 +21,30 @@ export class ShoppinglistPage {
   }
 
   /**
-   * Get the store tabs on the interactive shoppinglist
+   * Get the specified store tab from the interactive shoppinglist
    *
-   * @param position the order of the store tab (first tab is '0')
+   * @param position the position of the desired store tab (first, left-most, tab is '0')
+   * @returns the tab element for the specified position
+   *
+   * @deprecated We should stop using this since it will totally break if/when we
+   * rearrange the order of the stores in the tab group. Calls to this should be
+   * replaced with calls to `getStoreTabByName()` (or something even better).
    */
+
   getStoreTab(position: number) {
     return cy.get('.store-tabs-group .mat-tab-labels div[role="tab"]').eq(position);
+  }
+
+  /**
+   * Get the specified store tab from the interactive shoppinglist
+   *
+   * @param name the name of the store for the desired store tab
+   * @returns the tab element for the specified store name
+   */
+  getStoreTabByName(name: string) {
+    const tab = cy.get('.store-tabs-group .mat-tab-labels div[role="tab"]').contains(name);
+    tab.should('have.length', 1);
+    return tab;
   }
 
   /**
@@ -39,20 +56,78 @@ export class ShoppinglistPage {
     return cy.get('.store-tabs-group .mat-tab-body[role="tabpanel"]').eq(position);
   }
 
-  getStoreItems(position: number) {
-    this.getStoreProductsPanel(position);
+  /**
+   * Get all the items in the shopping list for the store at the
+   * specified position.
+   *
+   * @param storePosition The position in the tab group of the desired
+   * store; the left-most store is at position zero.
+   * @returns the list of all the shopping list items for that store
+   *
+   * @deprecated We should stop using this since it will totally break
+   * if/when we change the ordering of the stores in the tab group.
+   */
+  getStoreItems(storePosition: number) {
+    // Does this next line actually _do_ anything? We don't capture
+    // the return value or act on it, so if it does do anything, it's
+    // entirely via side-effects, which at a minimum means that the
+    // name of `getStoreProductsPanel()` is dodgy.
+    // this.getStoreProductsPanel(storePosition);
     return cy.get('.shopping-list-item');
   }
 
-  clickDeleteButton(num: number) {
-    return this.getStoreItems(num).first().within(($item) => {
+  /**
+   * Get all the items in the shopping list for the store with the
+   * specified name.
+   *
+   * @param storeName The name of the desired store.
+   * @returns the list of all the shopping list items for that store
+   */
+  getStoreItemsByName(storeName: string) {
+    // Does this next line actually _do_ anything? We don't capture
+    // the return value or act on it, so if it does do anything, it's
+    // entirely via side-effects, which at a minimum means that the
+    // name of `getStoreProductsPanel()` is dodgy.
+    this.getStoreTabByName(storeName).click();
+    cy.wait(1000);
+    return cy.get('.shopping-list-item');
+  }
+
+  /**
+   * Delete the first shopping list item for the store in the
+   * specified position in the tab group. This finds the first item
+   * for that store, and clicks the delete button for that item.
+   *
+   * @param storePosition The position in the tab group of the desired
+   * store; the left-most store is at position zero.
+   *
+   * @deprecated We should stop using this since it will totally break
+   * if/when we change the ordering of the stores in the tab group.
+   */
+  deleteFirstItemInStore(storePosition: number) {
+    return this.getStoreItems(storePosition).first().within((_$item) => {
+      cy.get('[data-test=deleteItemButton]')
+        .click();
+    });
+  }
+
+  /**
+   * Delete the first shopping list item for the store with the
+   * specified name in the tab group. This finds the first item
+   * for that store, and clicks the delete button for that item.
+   *
+   * @param storeName The name of the desired store.
+   */
+  deleteFirstItemInStoreByName(storeName: string) {
+    return this.getStoreItemsByName(storeName).first().within((_$item) => {
       cy.get('[data-test=deleteItemButton]')
         .click();
     });
   }
 
   clickDialogDeleteButton() {
-    return cy.get('[data-test=dialogDelete]').click();
+    cy.get('[data-test=dialogDelete]').click();
+    cy.get('[data-test=dialogDelete]').should('not.exist');
   }
 
   /**
