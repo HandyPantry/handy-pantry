@@ -68,7 +68,7 @@ public class Server {
     server.get("/api/products", productController::getAllProducts);
 
     // List the products grouped by their category
-    server.get("/api/products/group", productController::groupProductsByCategory);
+    server.get("/api/products-by-category", productController::groupProductsByCategory);
 
     // Get the specified product
     server.get("/api/products/{id}", productController::getProductByID);

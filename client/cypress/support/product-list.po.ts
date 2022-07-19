@@ -1,4 +1,5 @@
 import { ProductCategory } from 'src/app/products/product';
+import { Product } from 'src/app/products/product';
 
 export class ProductListPage {
   navigateTo() {
@@ -150,5 +151,17 @@ export class ProductListPage {
 
   addProductSubmitButton() {
     return cy.get('[data-test="confirmProductButton"]');
+  }
+
+  addNewProductToDatabase(product: Product) {
+    cy.visit('/products/new');
+
+    this.getAddProductFormField('productName').type(product.productName);
+    this.getAddProductFormField('brand').type(product.brand);
+    this.selectMatSelectValue(cy.get('[formControlName=store]'), product.store);
+    this.getAddProductFormField('location').type(product.location);
+    this.selectMatSelectValue(cy.get('[formControlName=category]'), product.category);
+
+    return this.addProductSubmitButton().click();
   }
 }

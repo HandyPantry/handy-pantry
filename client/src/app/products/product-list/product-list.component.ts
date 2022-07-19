@@ -157,7 +157,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getGroupedProductsFromServer();
-    //this.getProductsFromServer();
   }
 
   ngOnDestroy(): void {

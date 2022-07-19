@@ -155,13 +155,13 @@ describe('ProductService', () => {
     req.flush(testProducts);
   });
 
-  it('getGroupedProducts calls api/products/group with parameter \'category\'', () => {
+  it('getGroupedProducts calls api/products-by-category with parameter \'category\'', () => {
     productService.getGroupedProducts({ category: 'produce'}).subscribe(
       products => expect(products).toBe(testGroupedProducts)
     );
 
     const req = httpTestingController.expectOne(
-      (request) => request.url.startsWith(`${productService.productUrl}/group`) && request.params.has('category')
+      (request) => request.url.startsWith(`${productService.productUrl}-by-category`) && request.params.has('category')
     );
     expect(req.request.method).toEqual('GET');
   });
@@ -172,7 +172,7 @@ describe('ProductService', () => {
     );
 
     const req = httpTestingController.expectOne(
-      (request) => request.url.startsWith(`${productService.productUrl}/group`) && request.params.has('store')
+      (request) => request.url.startsWith(`${productService.productUrl}-by-category`) && request.params.has('store')
     );
     expect(req.request.method).toEqual('GET');
   });

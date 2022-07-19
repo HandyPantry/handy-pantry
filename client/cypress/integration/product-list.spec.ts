@@ -245,7 +245,7 @@ describe('Product already in shopping list add button', () => {
 
   // Product already in shopping list
   it('should click the add button, then click the button to go to the shopping list page', () => {
-    const testNewProduct: Product = {
+    const newTestProduct: Product = {
       _id: 'testID',
       productName: 'Frog Legs',
       brand: 'Marsh  Inc.',
@@ -260,26 +260,16 @@ describe('Product already in shopping list add button', () => {
       threshold: 4
     };
 
-    //First, add a new product to the product list (so we know it's not already in the shopping list)
-    cy.visit('/products/new');
-
-    page.getAddProductFormField('productName').type(testNewProduct.productName);
-    page.getAddProductFormField('brand').type(testNewProduct.brand);
-    page.selectMatSelectValue(cy.get('[formControlName=store]'), testNewProduct.store);
-    page.getAddProductFormField('location').type(testNewProduct.location);
-    page.selectMatSelectValue(cy.get('[formControlName=category]'), testNewProduct.category);
-
-    page.addProductSubmitButton().click();
-
+    page.addNewProductToDatabase(newTestProduct);
     page.navigateTo();
 
-    cy.get('#product-name-input').type(testNewProduct.productName);
+    cy.get('#product-name-input').type(newTestProduct.productName);
 
     page.getFilteredProductListItems().first().within(($product) => {
       cy.get('[data-test=addToShoppinglistButton]').click();
     });
     //Should open the add to Shopping List Dialog Here
-    cy.get('[data-test=addToShoppingListDialogTitle]').should('contain.text', testNewProduct.productName);
+    cy.get('[data-test=addToShoppingListDialogTitle]').should('contain.text', newTestProduct.productName);
     page.enterShoppingListCount('1');
     page.clickDialogAddShoppingButton();
     cy.get('.mat-simple-snack-bar-content')
@@ -289,7 +279,7 @@ describe('Product already in shopping list add button', () => {
     page.getFilteredProductListItems().first().within(($product) => {
       cy.get('[data-test=addToShoppinglistButton]').click();
     });
-    cy.get('[data-test=productAlreadyInShoppingListDialogTitle]').should('contain.text', testNewProduct.productName);
+    cy.get('[data-test=productAlreadyInShoppingListDialogTitle]').should('contain.text', newTestProduct.productName);
     page.clickDialogGoToShoppingButton();
     page.getUrl().should('be.equal', 'http://localhost:4200/shoppinglist#');
   });

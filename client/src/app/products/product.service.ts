@@ -6,14 +6,15 @@ import { environment } from '../../environments/environment';
 import { Product, ProductCategory } from './product';
 import { map } from 'rxjs/operators';
 import { CategorySortItem } from './CategorySortItem';
+import { useAnimation } from '@angular/animations';
 
 @Injectable()
 export class ProductService {
   readonly productUrl: string = environment.apiUrl + 'products';
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
-  getGroupedProducts(filters?: {category?: ProductCategory; store?: string }): Observable<CategorySortItem[]> {
+  getGroupedProducts(filters?: { category?: ProductCategory; store?: string }): Observable<CategorySortItem[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
       if (filters.category) {
@@ -22,12 +23,14 @@ export class ProductService {
       if (filters.store) {
         httpParams = httpParams.set('store', filters.store);
       }
-      return this.httpClient.get<CategorySortItem[]>(`${this.productUrl}/group`, {
+      return this.httpClient.get<CategorySortItem[]>(`${this.productUrl}-by-category`, {
         params: httpParams,
       });
     }
   }
 
+  /**
+   * @deprecated This method is no longer in use, use getGroupedProducts() instead. */
   getProducts(filters?: { category?: ProductCategory; store?: string }): Observable<Product[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
@@ -80,7 +83,7 @@ export class ProductService {
 
   addProduct(newProduct: Product): Observable<string> {
     // Send post request to add a new user with the user data as the body.
-    return this.httpClient.post<{id: string}>(this.productUrl, newProduct).pipe(map(res => res.id));
+    return this.httpClient.post<{ id: string }>(this.productUrl, newProduct).pipe(map(res => res.id));
   }
 
   deleteProduct(id: string): Observable<boolean> {
