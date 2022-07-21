@@ -27,3 +27,16 @@
     margin: 16px;
   }
 }
+.toolbar {
+  background-color: #9c27b0;
+  padding: 0px;
+}
+
+.toolbar>a {
+  color: white;
+  text-decoration: none;
+}
+
+.toolbar-item {
+  padding: 16px;
+}
