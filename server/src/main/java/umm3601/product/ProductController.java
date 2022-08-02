@@ -229,8 +229,7 @@ public class ProductController {
         .check(product -> product.category != null && product.category.length() > 0,
             "Product must have a non-empty category")
         .check(product -> product.store != null && product.store.length() > 0, "Product must have a non-empty store")
-        .check(product -> product.location != null && product.location.length() > 0,
-            "Product must have a non-empty location")
+        .check(product -> product.location != null, "Product location cannot be null")
         // .check(product -> product.notes != null && product.notes.length() > 0, "Product notes cannot be null")
         // .check(product -> product.tags != null && product.tags.size() >= 0, "Product
         // tags cannot be null")
