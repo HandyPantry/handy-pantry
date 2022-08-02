@@ -476,10 +476,6 @@ public class ProductControllerValidateProductSpec {
 
     assertEquals("", addedProduct.getString("location"));
 
-    /* assertThrows(ValidationException.class, () -> {
-      productController.addNewProduct(ctx);
-    }); */
-
   }
 
 }
