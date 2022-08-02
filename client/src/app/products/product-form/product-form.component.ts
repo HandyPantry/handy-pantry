@@ -41,7 +41,6 @@ export class ProductFormComponent implements OnInit, OnDestroy {
       { type: 'maxlength', message: 'Product description must be at less than 500 characters' }
     ],
     brand: [
-      { type: 'required', message: 'Product brand is required' },
       { type: 'minlength', message: 'Product brand must be at least 1 character' },
       { type: 'maxlength', message: 'Product brand must be at less than 100 characters' }
     ],
@@ -110,7 +109,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
         Validators.minLength(1), Validators.maxLength(500),
       ])),
       brand: new FormControl(this.getProductValueOrEmptyString('brand'), Validators.compose([
-        Validators.required, Validators.minLength(1), Validators.maxLength(100),
+        Validators.minLength(1), Validators.maxLength(100),
       ])),
       category: new FormControl(this.getProductValueOrEmptyString('category'), Validators.compose([
         Validators.required,
