@@ -27,7 +27,7 @@
         <div fxLayout="row wrap" fxLayoutGap="15px">
           <mat-form-field class="input-field">
             <mat-label>Store</mat-label>
-            <mat-select (selectionChange)="getProductsFromServer()" [(ngModel)]="productStore"
+            <mat-select (selectionChange)="getGroupedProductsFromServer()" [(ngModel)]="productStore"
               data-test="productStoreSelect">
               <mat-option>--</mat-option>
               <mat-option *ngFor="let store of storesList" [value]="store">{{store | titlecase }}
@@ -38,7 +38,7 @@
 
           <mat-form-field class="input-field">
             <mat-label>Category</mat-label>
-            <mat-select (selectionChange)="getProductsFromServer()" [(ngModel)]="productCategory"
+            <mat-select (selectionChange)="getGroupedProductsFromServer()" [(ngModel)]="productCategory"
               data-test="productCategorySelect">
               <mat-option>--</mat-option>
               <mat-option *ngFor="let category of categoriesList" [value]="category">{{category | titlecase }}
@@ -60,7 +60,7 @@
 
 <!-- Products displayed on filter search -->
 <div fxLayout="row">
-  <div fxFlex fxFlex.gt-sm="80" fxFlexOffset.gt-sm="10" *ngIf="serverFilteredProducts; else productsError"
+  <div fxFlex fxFlex.gt-sm="80" fxFlexOffset.gt-sm="10" *ngIf="groupedProducts; else productsError"
     style="width: 90%;">
     <mat-card *ngIf="activeFilters" class="conditional-product-list">
       <mat-card-content>
@@ -106,18 +106,18 @@
       <mat-card-content>
         <!--Display All Product Categories as Dropdowns-->
         <mat-accordion>
-          <mat-expansion-panel *ngFor="let productCategory of (this.categoryNameMap | keyvalue)"
-            [ngClass]="productCategory.key.replace(' ', '-') + '-expansion-panel'">
+          <mat-expansion-panel *ngFor="let categoryGroup of this.groupedProducts"
+            [ngClass]="categoryGroup.category.replace(' ', '-') + '-expansion-panel'">
             <mat-expansion-panel-header>
-              <mat-panel-title [ngClass]="productCategory.key.replace(' ', '-') + '-panel-title'" style="text-transform: capitalize">
-                {{ productCategory.key }}
+              <mat-panel-title [ngClass]="categoryGroup.category.replace(' ', '-') + '-panel-title'" style="text-transform: capitalize">
+                {{ categoryGroup.category }} ({{ categoryGroup.count}})
               </mat-panel-title>
             </mat-expansion-panel-header>
 
             <!--Display All the Products in the Category-->
             <mat-action-list>
-              <mat-list-item [ngClass]="productCategory.key.replace(' ', '-') + '-nav-list'"
-                *ngFor="let product of productCategory.value">
+              <mat-list-item [ngClass]="categoryGroup.category.replace(' ', '-') + '-nav-list'"
+                *ngFor="let product of categoryGroup.products">
                 <!-- Product Info wrapped by link to product card -->
                 <div matLine [routerLink]="['/products', product._id]">
                   <p matLine class="product-list-brand" style="color:purple"><b> {{product.brand}} </b></p>

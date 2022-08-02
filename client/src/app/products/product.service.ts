@@ -5,13 +5,32 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Product, ProductCategory } from './product';
 import { map } from 'rxjs/operators';
+import { CategorySortItem } from './CategorySortItem';
+
 
 @Injectable()
 export class ProductService {
   readonly productUrl: string = environment.apiUrl + 'products';
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
+  getGroupedProducts(filters?: { category?: ProductCategory; store?: string }): Observable<CategorySortItem[]> {
+    let httpParams: HttpParams = new HttpParams();
+    if (filters) {
+      if (filters.category) {
+        httpParams = httpParams.set('category', filters.category);
+      }
+      if (filters.store) {
+        httpParams = httpParams.set('store', filters.store);
+      }
+      return this.httpClient.get<CategorySortItem[]>(`${this.productUrl}-by-category`, {
+        params: httpParams,
+      });
+    }
+  }
+
+  /**
+   * @deprecated This method is no longer in use, use getGroupedProducts() instead. */
   getProducts(filters?: { category?: ProductCategory; store?: string }): Observable<Product[]> {
     let httpParams: HttpParams = new HttpParams();
     if (filters) {
@@ -64,7 +83,7 @@ export class ProductService {
 
   addProduct(newProduct: Product): Observable<string> {
     // Send post request to add a new user with the user data as the body.
-    return this.httpClient.post<{id: string}>(this.productUrl, newProduct).pipe(map(res => res.id));
+    return this.httpClient.post<{ id: string }>(this.productUrl, newProduct).pipe(map(res => res.id));
   }
 
   deleteProduct(id: string): Observable<boolean> {

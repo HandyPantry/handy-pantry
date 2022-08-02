@@ -3,6 +3,7 @@
 import { HttpClient } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { CategorySortItem } from './CategorySortItem';
 import { Product } from './product';
 import { ProductService } from './product.service';
 
@@ -53,6 +54,65 @@ describe('ProductService', () => {
     }
   ];
 
+  const testGroupedProducts: CategorySortItem[] = [
+    {
+      category: 'produce',
+      count: 1,
+      products: [{
+        _id: 'banana_id',
+        productName: 'banana',
+        description: '',
+        brand: 'Dole',
+        category: 'produce',
+        store: 'Walmart',
+        location: '',
+        notes: '',
+        tags: [],
+        lifespan: 0,
+        threshold: 0,
+        image: ''
+      }]
+    },
+    {
+      category: 'dairy',
+      count: 1,
+      products: [{
+        _id: 'milk_id',
+      productName: 'Whole Milk',
+      description: '',
+      brand: 'Land O Lakes',
+      category: 'dairy',
+      store: 'SuperValu',
+      location: '',
+      notes: '',
+      tags: [],
+      lifespan: 0,
+      threshold: 0,
+      image: ''
+      }]
+    },
+    {
+      category: 'baked goods',
+      count: 1,
+      products: [
+        {
+          _id: 'bread_id',
+          productName: 'Wheat Bread',
+          description: '',
+          brand: 'Country Hearth',
+          category: 'baked goods',
+          store: 'Walmart',
+          location: '',
+          notes: '',
+          tags: [],
+          lifespan: 0,
+          threshold: 0,
+          image: ''
+        }
+      ]
+    }
+  ];
+
   let productService: ProductService;
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
@@ -93,6 +153,28 @@ describe('ProductService', () => {
     // triggers the subscribe above, which leads to that check
     // actually being performed.
     req.flush(testProducts);
+  });
+
+  it('getGroupedProducts calls api/products-by-category with parameter \'category\'', () => {
+    productService.getGroupedProducts({ category: 'produce'}).subscribe(
+      products => expect(products).toBe(testGroupedProducts)
+    );
+
+    const req = httpTestingController.expectOne(
+      (request) => request.url.startsWith(`${productService.productUrl}-by-category`) && request.params.has('category')
+    );
+    expect(req.request.method).toEqual('GET');
+  });
+
+  it('getGroupedProducts calls api/products/group with parameter \'store\'', () => {
+    productService.getGroupedProducts({ store: 'Walmart'}).subscribe(
+      products => expect(products).toBe(testGroupedProducts)
+    );
+
+    const req = httpTestingController.expectOne(
+      (request) => request.url.startsWith(`${productService.productUrl}-by-category`) && request.params.has('store')
+    );
+    expect(req.request.method).toEqual('GET');
   });
 
   it('getProducts() calls api/products with filter parameter \'produce\'', () => {

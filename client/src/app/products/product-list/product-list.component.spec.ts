@@ -101,25 +101,6 @@ describe('ProductListComponent', () => {
     productList.getProductsFromServer();
     expect(productList.filteredProducts.some((product: Product) => product.productName === 'banana')).toBe(true);
   });
-
-  it('should fill in categoryNameMap with brand key to array of product objects value', () => {
-    expect(productList.categoryNameMap.get('produce'))
-    .toEqual([{
-      _id: 'banana_id',
-      productName: 'banana',
-      description: '',
-      brand: 'Dole',
-      category: 'produce',
-      store: 'Walmart',
-      location: 'c 1',
-      notes: '',
-      tags: [],
-      lifespan: 0,
-      threshold: 0,
-      image: ''
-    }]);
-  });
-
 });
 
 
