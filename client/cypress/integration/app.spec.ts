@@ -9,5 +9,10 @@ describe('App', () => {
     page.getAppTitle().should('contain', 'Handy Pantry');
   });
 
-
+  it('Should have a working toolbar', () =>{
+    page.getNavLink('Products').click();
+    cy.url().should('match', /\/products$/);
+    page.getNavLink('Pantry').click();
+    cy.url().should('match', /^https?:\/\/[^\/]+\/?$/);
+  });
 });

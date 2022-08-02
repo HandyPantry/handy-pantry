@@ -214,7 +214,7 @@ describe ('Add Product to Pantry List', () => {
     page.enterNotes('This is a test');
     page.enterPantryQuantity('20');
     page.clickDialogAddButton();
-    cy.get('.mat-simple-snack-bar-content').should('contain.text', '20 Whole Milk, 1/2 gal successfully added to your pantry.');
+    cy.get('.mat-simple-snack-bar-content').should('be.visible').should('contain.text', '20 Whole Milk, 1/2 gal successfully added to your pantry.');
   });
 });
 
