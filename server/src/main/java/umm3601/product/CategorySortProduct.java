@@ -3,7 +3,7 @@ package umm3601.product;
 import java.util.ArrayList;
 
 @SuppressWarnings({ "VisibilityModifier"})
-public class CategorySortItem {
+public class CategorySortProduct {
 
   @SuppressWarnings({ "MemberName" })
   public String category;

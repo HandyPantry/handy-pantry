@@ -288,9 +288,9 @@ public class ProductControllerSpec {
    *            a list of `CategorySortItem`.
    * @return the list of `CategorySortItem` extracted from the given `Context`.
    */
-  private CategorySortItem[] getGroupedItems(Context ctx) {
+  private CategorySortProduct[] getGroupedItems(Context ctx) {
     String result = ctx.resultString();
-    CategorySortItem[] items = javalinJackson.fromJsonString(result, CategorySortItem[].class);
+    CategorySortProduct[] items = javalinJackson.fromJsonString(result, CategorySortProduct[].class);
     return items;
   }
 
@@ -424,12 +424,12 @@ public class ProductControllerSpec {
     Context ctx = mockContext("api/products/group");
 
     productController.groupProductsByCategory(ctx);
-    CategorySortItem[] returnedItems = getGroupedItems(ctx);
+    CategorySortProduct[] returnedItems = getGroupedItems(ctx);
 
     //check that there are 5 different categories with items
     assertEquals(5, returnedItems.length);
 
-    for (CategorySortItem item : returnedItems) {
+    for (CategorySortProduct item : returnedItems) {
       //check that the count is equal to the number of products
       assertEquals(item.count, item.products.size());
       //check that each item has the correct category
