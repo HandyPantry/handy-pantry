@@ -6,7 +6,7 @@ describe('App', () => {
   beforeEach(() => page.navigateTo());
 
   it('Should have a working toolbar', () =>{
-    cy.should('have.text', 'My Pantry');
+    cy.get('.toolbar-item').should('contain.text', 'My Pantry');
     it('Should be able to go to the pages',() =>{
       page.getNavLink('Products').click();
       cy.url().should('match', /\/products$/);
