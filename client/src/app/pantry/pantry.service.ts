@@ -5,6 +5,7 @@ import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Product } from '../products/product';
 import { ProductCategory } from '../products/product';
+import { CategorySortPantryItem } from './categorysortPantryItem';
 import { PantryItem } from './pantryItem';
 import { ComboItem } from './pantryItem';
 
@@ -15,6 +16,13 @@ export class PantryService {
 
   constructor(private httpClient: HttpClient) { }
 
+  getGroupedPantryItems(): Observable<CategorySortPantryItem[]> {
+    return this.httpClient.get<CategorySortPantryItem[]>(`${this.pantryUrl}-by-category`);
+  }
+
+  /**
+   * @deprecated Method no longer in use, use getGroupedPantryItems() instead.
+   */
   getPantryProducts(): Observable<Product[]> {
     return this.httpClient.get<Product[]>(this.pantryUrl, {
     });

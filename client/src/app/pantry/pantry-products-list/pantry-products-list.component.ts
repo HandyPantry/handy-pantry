@@ -66,6 +66,7 @@ expandedElement: PantryItem | null;
  * and an instance of `MatSnackBar` into this component.
  *
  * @param pantryService the `PantryService` used to get products in the pantry
+ * @param productService the `ProductService` used to get product details from a pantryItem
  * @param snackBar the `MatSnackBar` used to display feedback
  */
 constructor(private pantryService: PantryService,

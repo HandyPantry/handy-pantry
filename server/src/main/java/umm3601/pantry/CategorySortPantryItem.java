@@ -8,5 +8,5 @@ public class CategorySortPantryItem {
   @SuppressWarnings({ "MemberName" })
   public String category;
   public int count;
-  public ArrayList<PantryItem> pantryItems;
+  public ArrayList<PantryDisplayItem> pantryItems;
 }

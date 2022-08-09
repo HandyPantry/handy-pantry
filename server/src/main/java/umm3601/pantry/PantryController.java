@@ -104,10 +104,11 @@ public class PantryController {
         .aggregate(Arrays.asList(
           //This is the problematic line (for some reason, this isn't working with our mock setup)
             Aggregates.lookup("products", "product", "_id", "productData"),
+            Aggregates.unwind("$productData"),
             Aggregates.group("$productData.category",
                 Accumulators.sum("count", 1),
                 Accumulators.addToSet("pantryItems", new Document("_id", "$_id")
-                    .append("product", "$product")
+                    .append("product", "$productData")
                     .append("purchase_date", "$purchase_date")
                     .append("notes", "$notes"))),
             Aggregates.project(
@@ -122,7 +123,7 @@ public class PantryController {
 
     /*
      * This currently sorts the pantry items within the accordion by their relative
-     * age (rather than name)
+     * age
      * from oldest to newest. This is probably not what we want, and the comparison
      * is using Strings to compare dates.
      * (Also not ideal, but it *should* work with the YYYY-MM-DD string format that
@@ -137,7 +138,6 @@ public class PantryController {
         return first.purchase_date.compareTo(second.purchase_date);
       });
     });
-
     ctx.json(output);
   }
 

@@ -69,11 +69,6 @@ public class PantryControllerSpec {
   // `setupEach()`, and then exercised in the various tests below.
   private PantryController pantryController;
 
-  // An instance of the productController class to enable getting product data
-  // based on
-  // a pantryItem's product field.
-  private ProductController productController;
-
   // A Mongo object ID that is initialized in `setupEach()` and used
   // in a few of the tests. It isn't used all that often, though,
   // which suggests that maybe we should extract the tests that
@@ -207,7 +202,6 @@ public class PantryControllerSpec {
     pantryDocuments.insertOne(apple);
 
     pantryController = new PantryController(db);
-    productController = new ProductController(db);
   }
 
   /**
@@ -263,19 +257,6 @@ public class PantryControllerSpec {
     String result = ctx.resultString();
     Product[] products = javalinJackson.fromJsonString(result, Product[].class);
     return products;
-  }
-
-  /**
-   * A helper method that gets a product based on the MongoID
-   * @param id the mongo ObjectID corresponding to a product
-   * @return the product corresponding to the id parameter.
-   */
-  private Product getProductByID(String id) {
-    Context ctx = mockContext("api/products/{id}", Map.of("id", id));
-    productController.getProductByID(ctx);
-    //We assume that there will only be one product per ID
-    Product returnedProduct = javalinJackson.fromJsonString(ctx.resultString(), Product.class);
-    return returnedProduct;
   }
 
   /**
@@ -418,8 +399,8 @@ public class PantryControllerSpec {
       // check that the count is equal to the number of pantryItems
       assertEquals(item.count, item.pantryItems.size());
       // check that each item has the correct category
-      for (PantryItem p : item.pantryItems) {
-        assertEquals(getProductByID(p.product).category, item.category);
+      for (PantryDisplayItem p : item.pantryItems) {
+        assertEquals(p.product.category, item.category);
       }
     }
   }

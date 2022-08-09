@@ -6,6 +6,8 @@ import { Product } from '../products/product';
 import { PantryItem } from './pantryItem';
 
 import { PantryService } from './pantry.service';
+import { CategorySortPantryItem } from './categorysortPantryItem';
+import { PantryDisplayItem } from './pantryDisplayItem';
 
 describe('PantryService', () => {
 
@@ -77,6 +79,47 @@ describe('PantryService', () => {
     }
   ];
 
+  const testPantryDisplayItems: PantryDisplayItem[] = [
+    {
+     _id: 'first_banana',
+     product: testPantryProducts[0],
+     purchase_date: new Date('2022-03-30')
+    },
+    {
+     _id: 'sole_milk',
+     product: testPantryProducts[1],
+     purchase_date: new Date('2020-07-16')
+    },
+    {
+     _id: 'second_banana',
+     product: testPantryProducts[0],
+     purchase_date: new Date('2022-03-31')
+    },
+    {
+     _id: 'sole_bread',
+     product: testPantryProducts[2],
+     purchase_date: new Date('2022-03-27')
+    }
+  ];
+
+  const testGroupedPantryItems: CategorySortPantryItem[] = [
+    {
+      category: 'baked goods',
+      count: 1,
+      pantryItems: [ testPantryDisplayItems[3] ]
+    },
+    {
+      category: 'dairy',
+      count: 1,
+      pantryItems: [ testPantryDisplayItems[1] ]
+    },
+    {
+      category: 'produce',
+      count: 2,
+      pantryItems: [ testPantryDisplayItems[0], testPantryDisplayItems[2] ]
+    }
+  ];
+
   let pantryService: PantryService;
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
@@ -140,6 +183,17 @@ describe('PantryService', () => {
         // actually being performed.
         req.flush(testPantryItems);
 
+  });
+
+  it('getGroupedProducts calls api/pantry-by-category', () => {
+    pantryService.getGroupedPantryItems().subscribe(
+      products => expect(products).toBe(testGroupedPantryItems)
+    );
+
+    const req = httpTestingController.expectOne(
+      (request) => request.url.startsWith(`${pantryService.pantryUrl}-by-category`)
+    );
+    expect(req.request.method).toEqual('GET');
   });
 
 });
