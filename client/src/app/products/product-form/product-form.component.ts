@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Product } from '../product';
 import { ProductService } from '../product.service';
-import { BehaviorSubject, filter, Subscription } from 'rxjs';
+import { BehaviorSubject, filter, lastValueFrom, Subscription } from 'rxjs';
 export type FormMode = 'EDIT' | 'ADD';
 @Component({
   selector: 'app-product-form',
@@ -172,13 +172,12 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     }
   }
 
-
   //Right now only non-required fields can be edited.
   async submitForm(): Promise<void> {
     /* istanbul ignore next */
     if (this.mode === 'ADD') {
       try {
-        const newID = await this.productService.addProduct(this.productForm.value).toPromise();
+        const newID = await lastValueFrom(this.productService.addProduct(this.productForm.value));
         this.snackBar.open(`${ProductFormComponent.addMessageSuccess}: ${this.productForm.value.productName}`, 'OK', {duration: 5000});
         this.router.navigate(['/products/' + newID]);
       } catch (e) {
@@ -189,7 +188,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     }
     else if (this.mode === 'EDIT') {
       try {
-        const newProduct = await this.productService.editProduct(this.id, this.productForm.value).toPromise();
+        const newProduct = await lastValueFrom(this.productService.editProduct(this.id, this.productForm.value));
         this.snackBar.open(`${ProductFormComponent.editMessageSuccess}: ${this.productForm.value.productName}`, 'OK', {
           duration: 5000,
         });
