@@ -168,9 +168,9 @@ for (const mode of possibleModes) {
         brandControl = productForm.controls.brand;
       });
 
-      it('should not allow empty brand', () => {
+      it('should allow empty brand', () => {
         brandControl.setValue('');
-        expect(brandControl.valid).toBeFalsy();
+        expect(brandControl.valid).toBeTruthy();
       });
 
       it('should be fine with "brand of item"', () => {
