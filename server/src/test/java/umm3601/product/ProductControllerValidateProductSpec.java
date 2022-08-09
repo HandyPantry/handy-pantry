@@ -314,9 +314,18 @@ public class ProductControllerValidateProductSpec {
 
     Context ctx = mockContext("api/products");
 
-    assertThrows(ValidationException.class, () -> {
-      productController.addNewProduct(ctx);
-    });
+    productController.addNewProduct(ctx);
+    String result = ctx.resultString();
+    String id = javalinJackson.fromJsonString(result, ObjectNode.class).get("id").asText();
+
+    assertEquals(HttpURLConnection.HTTP_CREATED, mockRes.getStatus());
+
+    assertNotEquals("", id);
+    assertEquals(1, db.getCollection("products").countDocuments(eq("_id", new ObjectId(id))));
+
+    Document addedProduct = db.getCollection("products").find(eq("_id", new ObjectId(id))).first();
+
+    assertEquals("", addedProduct.getString("brand"));
   }
 
   @Test
@@ -368,7 +377,6 @@ public class ProductControllerValidateProductSpec {
       productController.addNewProduct(ctx);
     });
   }
-
   @Test
   public void addNullStoreProduct() throws IOException {
     String testNewProduct = "{"
@@ -464,9 +472,19 @@ public class ProductControllerValidateProductSpec {
 
     Context ctx = mockContext("api/products");
 
-    assertThrows(ValidationException.class, () -> {
-      productController.addNewProduct(ctx);
-    });
+    productController.addNewProduct(ctx);
+    String result = ctx.resultString();
+    String id = javalinJackson.fromJsonString(result, ObjectNode.class).get("id").asText();
+
+    assertEquals(HttpURLConnection.HTTP_CREATED, mockRes.getStatus());
+
+    assertNotEquals("", id);
+    assertEquals(1, db.getCollection("products").countDocuments(eq("_id", new ObjectId(id))));
+
+    Document addedProduct = db.getCollection("products").find(eq("_id", new ObjectId(id))).first();
+
+    assertEquals("", addedProduct.getString("location"));
+
   }
 
 }
