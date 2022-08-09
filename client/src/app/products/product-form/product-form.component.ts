@@ -57,7 +57,6 @@ export class ProductFormComponent implements OnInit, OnDestroy {
       { type: 'maxlength', message: 'Product store must be at less than 100 characters' }
     ],
     location: [
-      { type: 'required', message: 'Must provide a location'},
       { type: 'minlength', message: 'Product location must be at least 1 character' },
       { type: 'maxlength', message: 'Product location must be at less than 100 characters' }
     ],
@@ -120,7 +119,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
         Validators.required, Validators.minLength(1), Validators.maxLength(100),
       ])),
       location: new FormControl(this.getProductValueOrEmptyString('location'), Validators.compose([
-        Validators.required, Validators.minLength(1), Validators.maxLength(100),
+        Validators.minLength(1), Validators.maxLength(100),
       ])),
       notes: new FormControl(this.getProductValueOrEmptyString('notes'), Validators.compose([
         Validators.minLength(1), Validators.maxLength(2000),
