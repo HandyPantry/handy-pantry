@@ -43,7 +43,6 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.http.util.ContextUtil;
 import io.javalin.plugin.json.JavalinJackson;
 import umm3601.product.Product;
-import umm3601.product.ProductController;
 
 /**
  * Tests the logic of the PantryController
