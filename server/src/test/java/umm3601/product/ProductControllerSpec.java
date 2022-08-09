@@ -281,12 +281,12 @@ public class ProductControllerSpec {
 
   /**
    * A little helper method that assumes that the given context
-   * body contains a list of CategorySortItems, and extracts and returns
+   * body contains a list of CategorySortProducts, and extracts and returns
    * that list.
    *
    * @param ctx the `Context` whose body is assumed to contain
-   *            a list of `CategorySortItem`.
-   * @return the list of `CategorySortItem` extracted from the given `Context`.
+   *            a list of `CategorySortProduct`.
+   * @return the list of `CategorySortProduct` extracted from the given `Context`.
    */
   private CategorySortProduct[] getGroupedItems(Context ctx) {
     String result = ctx.resultString();
@@ -421,7 +421,7 @@ public class ProductControllerSpec {
 
   @Test
   public void groupProductsByCategory() {
-    Context ctx = mockContext("api/products/group");
+    Context ctx = mockContext("api/products-by-category");
 
     productController.groupProductsByCategory(ctx);
     CategorySortProduct[] returnedItems = getGroupedItems(ctx);

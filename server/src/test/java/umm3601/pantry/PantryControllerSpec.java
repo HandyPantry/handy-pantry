@@ -43,6 +43,7 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.http.util.ContextUtil;
 import io.javalin.plugin.json.JavalinJackson;
 import umm3601.product.Product;
+import umm3601.product.ProductController;
 
 /**
  * Tests the logic of the PantryController
@@ -67,6 +68,11 @@ public class PantryControllerSpec {
   // An instance of the controller we're testing that is prepared in
   // `setupEach()`, and then exercised in the various tests below.
   private PantryController pantryController;
+
+  // An instance of the productController class to enable getting product data
+  // based on
+  // a pantryItem's product field.
+  private ProductController productController;
 
   // A Mongo object ID that is initialized in `setupEach()` and used
   // in a few of the tests. It isn't used all that often, though,
@@ -173,18 +179,18 @@ public class PantryControllerSpec {
     List<Document> testPantryEntries = new ArrayList<>();
     testPantryEntries.add(
         new Document()
-            .append("product", bananaEntryId.toHexString()) // oid of banana
+            .append("product", bananaEntryId) // oid of banana
             .append("purchase_date", "2022-03-01")
             .append("notes", "I eat these with toothpaste, yum-yum."));
     // Set up two instances beans entered at different dates
     testPantryEntries.add(
         new Document()
-            .append("product", beansEntryId.toHexString()) // oid of beans
+            .append("product", beansEntryId) // oid of beans
             .append("purchase_date", "2022-02-01")
             .append("notes", "My cool product notes."));
     testPantryEntries.add(
         new Document()
-            .append("product", beansEntryId.toHexString()) // oid of beans
+            .append("product", beansEntryId) // oid of beans
             .append("purchase_date", "2022-03-01")
             .append("notes", "My other cool product notes."));
 
@@ -194,13 +200,14 @@ public class PantryControllerSpec {
     appleEntryId = new ObjectId();
     Document apple = new Document()
         .append("_id", appleEntryId)
-        .append("product", bananaEntryId.toHexString())
+        .append("product", bananaEntryId)
         .append("purchase_date", "2023-01-27")
         .append("notes", "check on gerbils every 3 days");
 
     pantryDocuments.insertOne(apple);
 
     pantryController = new PantryController(db);
+    productController = new ProductController(db);
   }
 
   /**
@@ -259,6 +266,19 @@ public class PantryControllerSpec {
   }
 
   /**
+   * A helper method that gets a product based on the MongoID
+   * @param id the mongo ObjectID corresponding to a product
+   * @return the product corresponding to the id parameter.
+   */
+  private Product getProductByID(String id) {
+    Context ctx = mockContext("api/products/{id}", Map.of("id", id));
+    productController.getProductByID(ctx);
+    //We assume that there will only be one product per ID
+    Product returnedProduct = javalinJackson.fromJsonString(ctx.resultString(), Product.class);
+    return returnedProduct;
+  }
+
+  /**
    * A little helper method that assumes that the given context
    * body contains a *single* PantryItem, and extracts and returns
    * that PantryItem.
@@ -271,6 +291,22 @@ public class PantryControllerSpec {
     String result = ctx.resultString();
     PantryItem pantryItem = javalinJackson.fromJsonString(result, PantryItem.class);
     return pantryItem;
+  }
+
+  /**
+   * A little helper method that assumes that the given context
+   * body contains a list of CategorySortProducts, and extracts and returns
+   * that list.
+   *
+   * @param ctx the `Context` whose body is assumed to contain
+   *            a list of `CategorySortPantryItem`.
+   * @return the list of `CategorySortPantryItem` extracted from the given
+   *         `Context`.
+   */
+  private CategorySortPantryItem[] getGroupedItems(Context ctx) {
+    String result = ctx.resultString();
+    CategorySortPantryItem[] items = javalinJackson.fromJsonString(result, CategorySortPantryItem[].class);
+    return items;
   }
 
   @Test
@@ -365,6 +401,27 @@ public class PantryControllerSpec {
       pantryController.getAllProductsInPantry(ctx);
     });
 
+  }
+
+  @Test
+  public void groupPantryItemsByCategory() {
+    String path = "api/pantry-by-category";
+    Context ctx = mockContext(path);
+
+    pantryController.groupPantryItemsByCategory(ctx);
+
+    CategorySortPantryItem[] returnedPantryItems = getGroupedItems(ctx);
+
+    // check that there are 2 categories with items in them
+    assertEquals(2, returnedPantryItems.length);
+    for (CategorySortPantryItem item : returnedPantryItems) {
+      // check that the count is equal to the number of pantryItems
+      assertEquals(item.count, item.pantryItems.size());
+      // check that each item has the correct category
+      for (PantryItem p : item.pantryItems) {
+        assertEquals(getProductByID(p.product).category, item.category);
+      }
+    }
   }
 
   @Test
