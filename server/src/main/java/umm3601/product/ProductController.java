@@ -223,7 +223,7 @@ public class ProductController {
             "Product must have a non-empty product name")
         .check(product -> product.description != null,
             "Product description cannot be null")
-        .check(product -> product.brand != null && product.brand.length() > 0, "Product must have a non-empty brand")
+        .check(product -> product.brand != null,  "Product brand must not be null")
         // .check(product -> product.category.matches("^(admin|editor|viewer)$"), "User
         // must have a legal user role")
         .check(product -> product.category != null && product.category.length() > 0,
