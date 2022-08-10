@@ -168,9 +168,9 @@ for (const mode of possibleModes) {
         brandControl = productForm.controls.brand;
       });
 
-      it('should not allow empty brand', () => {
+      it('should allow empty brand', () => {
         brandControl.setValue('');
-        expect(brandControl.valid).toBeFalsy();
+        expect(brandControl.valid).toBeTruthy();
       });
 
       it('should be fine with "brand of item"', () => {
@@ -284,9 +284,9 @@ for (const mode of possibleModes) {
         locationControl = productForm.controls.location;
       });
 
-      it('should not allow empty location', () => {
+      it('should allow empty location', () => {
         locationControl.setValue('');
-        expect(locationControl.valid).toBeFalsy();
+        expect(locationControl.valid).toBeTruthy();
       });
 
       it('should be fine with "location of item"', () => {

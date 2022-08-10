@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Product } from '../product';
 import { ProductService } from '../product.service';
-import { BehaviorSubject, filter, Subscription } from 'rxjs';
+import { BehaviorSubject, filter, lastValueFrom, Subscription } from 'rxjs';
 export type FormMode = 'EDIT' | 'ADD';
 @Component({
   selector: 'app-product-form',
@@ -41,7 +41,6 @@ export class ProductFormComponent implements OnInit, OnDestroy {
       { type: 'maxlength', message: 'Product description must be at less than 500 characters' }
     ],
     brand: [
-      { type: 'required', message: 'Product brand is required' },
       { type: 'minlength', message: 'Product brand must be at least 1 character' },
       { type: 'maxlength', message: 'Product brand must be at less than 100 characters' }
     ],
@@ -58,7 +57,6 @@ export class ProductFormComponent implements OnInit, OnDestroy {
       { type: 'maxlength', message: 'Product store must be at less than 100 characters' }
     ],
     location: [
-      { type: 'required', message: 'Must provide a location'},
       { type: 'minlength', message: 'Product location must be at least 1 character' },
       { type: 'maxlength', message: 'Product location must be at less than 100 characters' }
     ],
@@ -110,7 +108,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
         Validators.minLength(1), Validators.maxLength(500),
       ])),
       brand: new FormControl(this.getProductValueOrEmptyString('brand'), Validators.compose([
-        Validators.required, Validators.minLength(1), Validators.maxLength(100),
+        Validators.minLength(1), Validators.maxLength(100),
       ])),
       category: new FormControl(this.getProductValueOrEmptyString('category'), Validators.compose([
         Validators.required,
@@ -121,7 +119,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
         Validators.required, Validators.minLength(1), Validators.maxLength(100),
       ])),
       location: new FormControl(this.getProductValueOrEmptyString('location'), Validators.compose([
-        Validators.required, Validators.minLength(1), Validators.maxLength(100),
+        Validators.minLength(1), Validators.maxLength(100),
       ])),
       notes: new FormControl(this.getProductValueOrEmptyString('notes'), Validators.compose([
         Validators.minLength(1), Validators.maxLength(2000),
@@ -173,13 +171,12 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     }
   }
 
-
   //Right now only non-required fields can be edited.
   async submitForm(): Promise<void> {
     /* istanbul ignore next */
     if (this.mode === 'ADD') {
       try {
-        const newID = await this.productService.addProduct(this.productForm.value).toPromise();
+        const newID = await lastValueFrom(this.productService.addProduct(this.productForm.value));
         this.snackBar.open(`${ProductFormComponent.addMessageSuccess}: ${this.productForm.value.productName}`, 'OK', {duration: 5000});
         this.router.navigate(['/products/' + newID]);
       } catch (e) {
@@ -190,7 +187,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     }
     else if (this.mode === 'EDIT') {
       try {
-        const newProduct = await this.productService.editProduct(this.id, this.productForm.value).toPromise();
+        const newProduct = await lastValueFrom(this.productService.editProduct(this.id, this.productForm.value));
         this.snackBar.open(`${ProductFormComponent.editMessageSuccess}: ${this.productForm.value.productName}`, 'OK', {
           duration: 5000,
         });
