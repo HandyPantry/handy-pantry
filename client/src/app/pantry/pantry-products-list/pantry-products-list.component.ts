@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs';
 import { Product, ProductCategory } from 'src/app/products/product';
 import { PantryItem } from '../pantryItem';
 import { PantryService } from '../pantry.service';
-import { ComboItem } from '../pantryItem';
 import { Router } from '@angular/router';
 import { DeletePantryItemComponent } from './delete-pantry-item/delete-pantry-item.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -26,18 +25,8 @@ import { PantryDisplayItem } from '../pantryDisplayItem';
   ]
 })
 export class PantryProductsListComponent implements OnInit {
-  // Unfiltered lists
-  public matchingProducts: Product[];
-  public pantryInfo: PantryItem[];
-  public comboItems: ComboItem[] = [];
-
 
   public groupedPantryItems: CategorySortPantryItem[] = [];
-
-
-
-  // Unique pantry & product combo object list
-  public uniqueComboItems: ComboItem[];
 
   getProductsSub: Subscription;
   getPantrySub: Subscription;
