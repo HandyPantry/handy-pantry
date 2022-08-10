@@ -15,9 +15,9 @@ describe ('Pantry List Expansion Panels and tables', () => {
 
     page.getTableProductNameByCategory('baking supplies').first().should('have.text', ' Active Dry Yeast, 4 oz ');
 
-    page.getTablePurchaseDateByCategory('baking supplies').first().should('have.text', ' 28/04/2022 ');
+    page.getTablePurchaseDateByCategory('baking supplies').last().should('have.text', ' 28/04/2022 ');
 
-    page.getTableNotesByCategory('baking supplies').first().should('contains.text', ' Expiration / Best Before: 08/2022 ');
+    page.getTableNotesByCategory('baking supplies').last().should('contains.text', ' Expiration / Best Before: 28/12/2022 ');
 
     page.getExpansionTitleByCategory('meat').should('have.text', ' meat (13) ');
 
