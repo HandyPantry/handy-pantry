@@ -3,7 +3,7 @@ export class AppPage {
     return cy.visit('/');
   }
 
-  getNavLink(navOption: 'Pantry' | 'Products') {
+  getNavLink(navOption: 'Pantry' | 'Products' | 'Shopping List') {
     return cy.contains('[routerlink] > .mat-list-item-content', `${navOption}`);
   }
 }
