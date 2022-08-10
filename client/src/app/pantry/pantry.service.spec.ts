@@ -6,7 +6,7 @@ import { Product } from '../products/product';
 import { PantryItem } from './pantryItem';
 
 import { PantryService } from './pantry.service';
-import { CategorySortPantryItem } from './categorysortPantryItem';
+import { CategorySortPantryItem } from './categorySortPantryItem';
 import { PantryDisplayItem } from './pantryDisplayItem';
 
 describe('PantryService', () => {

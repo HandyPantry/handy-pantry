@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable } from '@angular/core';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { PantryService } from 'src/app/pantry/pantry.service';
-import { Product, ProductCategory } from '../app/products/product';
+import { Product} from '../app/products/product';
 import { PantryItem } from 'src/app/pantry/pantryItem';
-import { CategorySortPantryItem } from 'src/app/pantry/categorysortPantryItem';
+import { CategorySortPantryItem } from 'src/app/pantry/categorySortPantryItem';
 import { PantryDisplayItem } from 'src/app/pantry/pantryDisplayItem';
 
 /**

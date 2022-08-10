@@ -3,11 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Product } from '../products/product';
-import { ProductCategory } from '../products/product';
-import { CategorySortPantryItem } from './categorysortPantryItem';
+import { CategorySortPantryItem } from './categorySortPantryItem';
 import { PantryItem } from './pantryItem';
-import { ComboItem } from './pantryItem';
 
 @Injectable()
 export class PantryService {

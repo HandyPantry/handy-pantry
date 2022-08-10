@@ -10,7 +10,7 @@ import { ComboItem } from '../pantryItem';
 import { Router } from '@angular/router';
 import { DeletePantryItemComponent } from './delete-pantry-item/delete-pantry-item.component';
 import { MatDialog } from '@angular/material/dialog';
-import { CategorySortPantryItem } from '../categorysortPantryItem';
+import { CategorySortPantryItem } from '../categorySortPantryItem';
 import { PantryDisplayItem } from '../pantryDisplayItem';
 
 @Component({
