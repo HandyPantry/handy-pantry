@@ -11,21 +11,21 @@ describe ('Pantry List Expansion Panels and tables', () => {
 
   it('Should check that expansion panels have the correct titles and items by categories', () => {
 
-    page.getExpansionTitleByCategory('baking supplies').should('have.text', ' baking supplies ');
+    page.getExpansionTitleByCategory('baking supplies').should('have.text', ' baking supplies (5) ');
 
-    page.getTableProductNameByCategory('baking supplies').first().should('have.text', ' Almond Paste, 8 oz ');
+    page.getTableProductNameByCategory('baking supplies').first().should('have.text', ' Active Dry Yeast, 4 oz ');
 
     page.getTablePurchaseDateByCategory('baking supplies').first().should('have.text', ' 28/04/2022 ');
 
-    page.getTableNotesByCategory('baking supplies').first().should('contains.text', ' Expiration / Best Before: 01/2022 ');
+    page.getTableNotesByCategory('baking supplies').first().should('contains.text', ' Expiration / Best Before: 08/2022 ');
 
-    page.getExpansionTitleByCategory('meat').should('have.text', ' meat ');
+    page.getExpansionTitleByCategory('meat').should('have.text', ' meat (13) ');
 
-    page.getTableProductNameByCategory('meat').first().should('have.text', ' Herring Fillets, 100 g ');
+    page.getTableProductNameByCategory('meat').first().should('have.text', ' Anchovies in Olive Oil, 2 oz ');
 
     page.getTablePurchaseDateByCategory('meat').first().should('have.text', ' 28/04/2022 ');
 
-    page.getTableNotesByCategory('meat').first().should('contains.text', ' Expiration / Best Before: 10/2021 ');
+    page.getTableNotesByCategory('meat').first().should('contains.text', ' Expiration / Best Before: 08/2021 ');
 
   });
 
@@ -40,7 +40,7 @@ describe ('RemovePantryItem() deletes an item from the pantry', () => {
 
   it('Should click the remove button of the first element and read the dialog', () => {
   page.clickRemoveButton('staples');
-  cy.get('mat-dialog-content').should('have.text', 'Remove Pure Maple Syrup, 16 Oz from your pantry?'
+  cy.get('mat-dialog-content').should('have.text', 'Remove Chicken Instant Bullion Cubes, 92 G from your pantry?'
   +'This action cannot be undone.');
   });
 

@@ -122,15 +122,6 @@ export class MockPantryService extends PantryService {
     super(null);
   }
 
-  getPantryProducts(): Observable<Product[]> {
-    // Just return the test products regardless of what filters are passed in
-    return of(MockPantryService.testPantryProducts);
-  }
-
-  getPantry(): Observable<PantryItem[]> {
-    return of(MockPantryService.testPantryItems);
-  }
-
   getGroupedPantryItems(): Observable<CategorySortPantryItem[]> {
     const output: CategorySortPantryItem[] = [
       {

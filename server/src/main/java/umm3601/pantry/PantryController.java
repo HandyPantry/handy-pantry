@@ -102,7 +102,8 @@ public class PantryController {
 
     ArrayList<CategorySortPantryItem> output = pantryCollection
         .aggregate(Arrays.asList(
-          //This is the problematic line (for some reason, this isn't working with our mock setup)
+            // This is the problematic line (for some reason, this isn't working with our
+            // mock setup)
             Aggregates.lookup("products", "product", "_id", "productData"),
             Aggregates.unwind("$productData"),
             Aggregates.group("$productData.category",
@@ -122,20 +123,12 @@ public class PantryController {
         .into(new ArrayList<>());
 
     /*
-     * This currently sorts the pantry items within the accordion by their relative
-     * age
-     * from oldest to newest. This is probably not what we want, and the comparison
-     * is using Strings to compare dates.
-     * (Also not ideal, but it *should* work with the YYYY-MM-DD string format that
-     * is currently being used.)
-     * Unfortunately, there isn't a good way to sort alphabetically by product name,
-     * because the pantry item doesn't store the product name,
-     * and so any comparison would require a lookup on the products, which is not
-     * easily done within the mongo query.
+     * This currently sorts the pantry items within the accordion alphabetically by
+     * product name
      */
     output.forEach(categoryEntry -> {
       categoryEntry.pantryItems.sort((first, second) -> {
-        return first.purchase_date.compareTo(second.purchase_date);
+        return first.product.productName.compareTo(second.product.productName);
       });
     });
     ctx.json(output);

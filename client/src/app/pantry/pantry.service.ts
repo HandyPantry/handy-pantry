@@ -20,32 +20,6 @@ export class PantryService {
     return this.httpClient.get<CategorySortPantryItem[]>(`${this.pantryUrl}-by-category`);
   }
 
-  /**
-   * @deprecated Method no longer in use, use getGroupedPantryItems() instead.
-   */
-  getPantryProducts(): Observable<Product[]> {
-    return this.httpClient.get<Product[]>(this.pantryUrl, {
-    });
-  }
-
-  getPantry(): Observable<PantryItem[]> {
-    return this.httpClient.get<PantryItem[]>(this.pantryInfoUrl, {
-    });
-  }
-
-  // eslint-disable-next-line max-len
-  filterComboItemByCategory(comboItems: ComboItem[], filters: { category?: ProductCategory }): ComboItem[] {
-
-    let filteredCombos = comboItems;
-
-    // Filter by category
-    if (filters.category) {
-      filteredCombos = filteredCombos.filter(combo => combo.category.indexOf(filters.category) !== -1);
-    }
-
-    return filteredCombos;
-  }
-
   addPantryItem(newPantryItem: PantryItem): Observable<string> {
     // Send post request to add a new user with the user data as the body.
     return this.httpClient.post<{ id: string }>(this.pantryUrl, newPantryItem).pipe(map(res => res.id));
