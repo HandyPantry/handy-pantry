@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { PantryService } from 'src/app/pantry/pantry.service';
 import { Product} from '../app/products/product';
 import { PantryItem } from 'src/app/pantry/pantryItem';
-import { CategorySortPantryItem } from 'src/app/pantry/categorySortPantryItem';
+import { CategorySortPantryItem } from 'src/app/pantry/CategorySortPantryItem';
 import { PantryDisplayItem } from 'src/app/pantry/pantryDisplayItem';
 
 /**
