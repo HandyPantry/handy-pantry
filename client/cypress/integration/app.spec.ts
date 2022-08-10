@@ -9,7 +9,7 @@ describe('App', () => {
     cy.get('.toolbar-item').should('contain.text', 'My Pantry');
   });
 
-  it('Should be able to go to the pages',() => {
+  it('Should be able to go to the pages', () => {
     page.getNavLink('Products').click();
     cy.url().should('match', /\/products$/);
     page.getNavLink('Pantry').click();
