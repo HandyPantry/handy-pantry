@@ -3,7 +3,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
-import { Product, ProductCategory } from 'src/app/products/product';
+import { ProductCategory } from 'src/app/products/product';
 import { PantryItem } from '../pantryItem';
 import { PantryService } from '../pantry.service';
 import { Router } from '@angular/router';
