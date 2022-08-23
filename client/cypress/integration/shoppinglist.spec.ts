@@ -29,11 +29,24 @@ describe('Interactive Shoppinglist', () => {
     page.changeView('interactive');
   });
 
+  // We probably want to delete `getStoreTab()` since that's pretty
+  // fragile by position, and switch everything to using `getStoreTabByName()`
+  // instead. TBH, I'm not thrilled about getting them by name (lots of things
+  // will break when we fix the spelling of "Willie's", for example), but
+  // I can't figure out how to propagate `data-test` attributes through a
+  // `mat-tab` element from Angular Material.
   it('Should have store tabs', () => {
     page.getStoreTab(0).should('exist').and('have.text', 'Other Store');
     page.getStoreTab(1).should('exist').and('have.text', 'Pomme de Terre');
     page.getStoreTab(2).should('exist').and('have.text', 'RealFoodHub');
     page.getStoreTab(3).should('exist').and('have.text', 'Willies');
+  });
+
+  it('Should have store tabs by name', () => {
+    page.getStoreTabByName('Other Store').should('exist');
+    page.getStoreTabByName('Willies');
+    page.getStoreTabByName('Pomme de Terre');
+    page.getStoreTabByName('RealFoodHub');
   });
 
   it('Should have products', () => {
@@ -89,10 +102,64 @@ describe('Delete from Shopping List', () => {
     cy.wait(1000);
   });
 
-  it('should click the delete button on an item and confirm delete', () => {
-    page.clickDeleteButton(0);
-    page.clickDialogDeleteButton();
-    page.getStoreItems(0).should('have.length', 3);
+  describe('Deleting from the left-most store', () => {
+    const storePos = 0;
+    let originalNumItems: number;
+
+    beforeEach(() => {
+      // Is this really a reasonable way to do this?
+      // I got the idea from https://stackoverflow.com/a/68815811
+      // and it seems to work, but I'm not super sold on it.
+      // I don't really like that we have to have this beforeEach
+      // to capture the previous value. I'm also not sure how or if we
+      // know that the `then` here will actually have run
+      // before we start the next `it`. If doesn't, then we could
+      // get race conditions where sometimes `originalNumItems` is
+      // properly initialized, and sometimes it isn't. – Nic
+      page.getStoreItems(storePos)
+          .its('length')
+          .then(len => originalNumItems = len);
+    });
+
+    it('Clicking the delete button on the first item should reduce the number of items by one', () => {
+      page.deleteFirstItemInStore(storePos);
+      page.clickDialogDeleteButton();
+      page.getStoreItems(storePos).should('have.length', originalNumItems-1);
+    });
+
+    // TODO:
+    //   - Test for deleting something other than only the first
+    //     item in a given store's shopping list.
+    //   - Test for deleting something from something other than
+    //     the first (left-most) store.
   });
 
+  describe('Deleting from Pomme de Terre', () => {
+    const storeName = 'Pomme de Terre';
+    let originalNumItems: number;
+
+    beforeEach(() => {
+      page.getStoreItemsByName(storeName)
+        .its('length')
+        .then(len => originalNumItems = len);
+    });
+
+    it('Clicking the delete button on the first item should reduce the number of items by one', () => {
+      console.log(originalNumItems);
+      page.deleteFirstItemInStoreByName(storeName);
+      page.clickDialogDeleteButton();
+      // Add a SnackBar to the UI, and then I can wait for it to appear and disappear
+      // before moving on? I also need to look at how this page redraws after deletion
+      // to see how icky that is.
+      cy.wait(1000);
+      console.log(originalNumItems);
+      page.getStoreItemsByName(storeName).should('have.length', originalNumItems - 1);
+    });
+
+    // TODO:
+    //   - Test for deleting something other than only the first
+    //     item in a given store's shopping list.
+    //   - Test for deleting something from something other than
+    //     the first (left-most) store.
+  });
 });
