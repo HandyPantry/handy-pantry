@@ -7,9 +7,9 @@ import { PantryProductsListComponent } from './pantry/pantry-products-list/pantr
 import { EditProductComponent } from './products/edit-product/edit-product.component';
 import { ShoppingListComponent } from './shoppinglist/shopping-list/shopping-list.component';
 
-// Note that the 'users/new' route needs to come before 'users/:id'.
-// If 'users/:id' came first, it would accidentally catch requests to
-// 'users/new'; the router would just think that the string 'new' is a user ID.
+// Note that the 'products/new' route needs to come before 'products/:id'.
+// If 'products/:id' came first, it would accidentally catch requests to
+// 'products/new'; the router would just think that the string 'new' is a product ID.
 const routes: Routes = [
   {path: '', component: PantryProductsListComponent, data: {title: 'Handy Pantry > My Pantry'}},
   {path: 'products', component: ProductListComponent, data: {title: 'Handy Pantry > Products'}},

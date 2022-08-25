@@ -3,19 +3,7 @@ export class AppPage {
     return cy.visit('/');
   }
 
-  getAppTitle() {
-    return cy.get('.app-title');
-  }
-
-  getSidenavButton() {
-    return cy.get('.sidenav-button');
-  }
-
-  getSidenav() {
-    return cy.get('.sidenav');
-  }
-
-  getNavLink(navOption: 'Pantry' | 'Products') {
-    return cy.contains('[routerlink] > .mat-list-item-content', `${navOption}`);
+  getNavLink(navOption: 'Pantry' | 'Products' | 'Shopping List') {
+    return cy.contains('[routerlink] > .mat-list-item-content', navOption);
   }
 }
