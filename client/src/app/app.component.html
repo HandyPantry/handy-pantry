@@ -1,40 +1,26 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport [autoFocus]="false">
-    <mat-toolbar>Navigation</mat-toolbar>
-    <mat-nav-list class="sidenav-list" role="navigation">
+<mat-toolbar class="toolbar">
 
-      <!-- Side navigation links -->
-
-      <a mat-list-item routerLink="/" routerLinkActive="drawer-list-item-active"
-        #routerLinkActiveInstance="routerLinkActive" [attr.tabindex]="routerLinkActiveInstance.isActive ? 0 : -1"
-        [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
-        <mat-icon matListIcon>local_dining</mat-icon>
-        My Pantry
-      </a>
-
-      <a mat-list-item routerLink="/products" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
-        <mat-icon matListIcon>local_parking</mat-icon>
-        Products
-      </a>
-
-      <a mat-list-item routerLink="/shoppinglist" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
-        <mat-icon matListIcon>local_grocery_store</mat-icon>
-        Shopping List
-      </a>
-
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" onclick="this.blur()"
-        class="sidenav-button">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span class="app-title">{{title}}</span>
-    </mat-toolbar>
-    <div class="main-content mat-typography">
-      <router-outlet></router-outlet>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  <a mat-list-item routerLink="/" routerLinkActive="drawer-list-item-active"
+    #routerLinkActiveInstance="routerLinkActive" [attr.tabindex]="routerLinkActiveInstance.isActive ? 0 : -1"
+    [routerLinkActiveOptions]="{exact: true}" class="toolbar-item">
+    <span>
+      My Pantry
+      <mat-icon matListIcon>local_dining</mat-icon>
+    </span>
+  </a>
+  <a mat-list-item routerLink="/products" routerLinkActive="drawer-list-item-active" class="toolbar-item">
+    <span>
+      Products
+      <mat-icon matListIcon>local_parking</mat-icon>
+    </span>
+  </a>
+  <a mat-list-item routerLink="/shoppinglist" routerLinkActive="drawer-list-item-active" class="toolbar-item">
+    <span>
+      Shopping List
+      <mat-icon matListIcon class="icon">shopping_cart</mat-icon>
+    </span>
+  </a>
+</mat-toolbar>
+<div class="main-content mat-typography">
+  <router-outlet></router-outlet>
+</div>
