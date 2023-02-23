@@ -1,7 +1,7 @@
 package umm3601.product;
 
 //import java.awt.Image;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.mongojack.Id;
 import org.mongojack.ObjectId;
@@ -23,7 +23,7 @@ public class Product {
   public String store;
   public String location;
   public String notes;
-  public ArrayList<String> tags;
+  public List<String> tags;
   public int lifespan;
   public int threshold;
   public String image;
