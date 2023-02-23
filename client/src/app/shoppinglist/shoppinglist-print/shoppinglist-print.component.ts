@@ -6,12 +6,8 @@ import { ShoppinglistStoreGroup } from '../shoppinglistStoreGroup';
   templateUrl: './shoppinglist-print.component.html',
   styleUrls: ['./shoppinglist-print.component.scss']
 })
-export class ShoppinglistPrintComponent implements OnInit {
+export class ShoppinglistPrintComponent {
   @Input() list: ShoppinglistStoreGroup[];
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }
