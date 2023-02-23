@@ -4,13 +4,9 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './edit-product.component.html',
   styleUrls: ['./edit-product.component.scss']
 })
-export class EditProductComponent implements OnInit {
+export class EditProductComponent {
 
   submitMode: 'ADD' | 'EDIT' = 'EDIT';
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }
