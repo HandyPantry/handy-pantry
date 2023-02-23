@@ -134,6 +134,8 @@ export class MockProductService extends ProductService {
       let id = testProduct._id;
       if (productId === id) {
         return of(newData);
+      } else {
+        return null;
       }
     }
   }

@@ -4,8 +4,7 @@ export class ProductFormPage {
   navigateTo(mode: 'ADD' | 'EDIT', product?: Product) {
     if (mode === 'ADD') {
       return cy.visit('/products/new');
-    }
-    if (mode === 'EDIT' && product) {
+    } else {
       return cy.visit(`/products/edit/${product._id}`);
     }
   }
@@ -13,8 +12,7 @@ export class ProductFormPage {
   getTitle(mode: 'ADD' | 'EDIT') {
     if (mode === 'ADD') {
       return cy.get('.add-product-title');
-    }
-    if (mode === 'EDIT') {
+    } else {
       return cy.get('.edit-product-title');
     }
   }

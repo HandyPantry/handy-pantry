@@ -25,10 +25,10 @@ export class ProductService {
       if (filters.store) {
         httpParams = httpParams.set('store', filters.store);
       }
-      return this.httpClient.get<CategorySortItem[]>(`${this.productUrl}-by-category`, {
-        params: httpParams,
-      });
     }
+    return this.httpClient.get<CategorySortItem[]>(`${this.productUrl}-by-category`, {
+      params: httpParams,
+    });
   }
 
   /**
