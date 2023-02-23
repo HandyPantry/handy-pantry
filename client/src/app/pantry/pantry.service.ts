@@ -3,12 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AppModule } from '../app.module';
 import { Product } from '../products/product';
 import { ProductCategory } from '../products/product';
 import { PantryItem } from './pantryItem';
 import { ComboItem } from './pantryItem';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PantryService {
   readonly pantryUrl: string = environment.apiUrl + 'pantry';
   readonly pantryInfoUrl: string = environment.apiUrl + 'pantry/info';

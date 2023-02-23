@@ -5,8 +5,11 @@ import { environment } from '../../environments/environment';
 import { ExistsObject } from './existsObject';
 import { ShoppinglistDatabaseItem } from './shoppinglistDatabaseItem';
 import { ShoppinglistStoreGroup } from './shoppinglistStoreGroup';
+import { AppModule } from '../app.module';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ShoppinglistService {
   readonly shoppinglistUrl: string = environment.apiUrl + 'shoppinglist';
 

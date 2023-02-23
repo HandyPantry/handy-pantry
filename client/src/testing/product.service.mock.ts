@@ -12,7 +12,9 @@ import { ProductService } from '../app/products/product.service';
  * A "mock" version of the `ProductService` that can be used to test components
  * without having to create an actual service.
  */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MockProductService extends ProductService {
 
   static testProducts: Product[] = [

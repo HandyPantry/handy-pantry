@@ -5,7 +5,9 @@ import { ShoppinglistService } from 'src/app/shoppinglist/shoppinglist.service';
 import { ShoppinglistDatabaseItem } from 'src/app/shoppinglist/shoppinglistDatabaseItem';
 import { ShoppinglistStoreGroup } from 'src/app/shoppinglist/shoppinglistStoreGroup';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class MockShoppingListService extends ShoppinglistService {
 
   static testShoppinglistStoreGroups: ShoppinglistStoreGroup[] = [

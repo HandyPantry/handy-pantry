@@ -6,9 +6,11 @@ import { environment } from '../../environments/environment';
 import { Product, ProductCategory } from './product';
 import { map } from 'rxjs/operators';
 import { CategorySortItem } from './CategorySortItem';
+import { AppModule } from '../app.module';
 
-
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ProductService {
   readonly productUrl: string = environment.apiUrl + 'products';
 
