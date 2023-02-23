@@ -57,7 +57,7 @@ import umm3601.product.Product;
 // also a lot of "magic strings" that Checkstyle doesn't actually
 // flag as a problem) make more sense.
 @SuppressWarnings({ "MagicNumber", "NoWhitespaceAfter" })
-public class PantryControllerSpec {
+class PantryControllerSpec {
 
   // Mock requests and responses that will be reset in `setupEach()`
   // and then (re)used in each of the tests.
@@ -95,7 +95,7 @@ public class PantryControllerSpec {
    * engine.
    */
   @BeforeAll
-  public static void setupAll() {
+  static void setupAll() {
     String mongoAddr = System.getenv().getOrDefault("MONGO_ADDR", "localhost");
 
     mongoClient = MongoClients.create(
@@ -106,13 +106,13 @@ public class PantryControllerSpec {
   }
 
   @AfterAll
-  public static void teardown() {
+  static void teardown() {
     db.drop();
     mongoClient.close();
   }
 
   @BeforeEach
-  public void setupEach() throws IOException {
+  void setupEach() throws IOException {
     // Reset our mock request and response objects
     mockReq.resetAll();
     mockRes.resetAll();
@@ -289,7 +289,7 @@ public class PantryControllerSpec {
   }
 
   @Test
-  public void getPantryItemByIdBadRequestResponse() throws IOException {
+  void getPantryItemByIdBadRequestResponse() throws IOException {
     Context ctx = mockContext("api/pantry/{id}", Map.of("id", "bad"));
 
     assertThrows(BadRequestResponse.class, () -> {
@@ -298,7 +298,7 @@ public class PantryControllerSpec {
   }
 
   @Test
-  public void getPantryItemByIdNotFoundResponse() throws IOException {
+  void getPantryItemByIdNotFoundResponse() throws IOException {
     Context ctx = mockContext("api/pantry/{id}", Map.of("id", "6224ba3bfc13ae3ac400000d"));
 
     assertThrows(NotFoundResponse.class, () -> {
@@ -307,7 +307,7 @@ public class PantryControllerSpec {
   }
 
   @Test
-  public void canGetAllProducts() throws IOException {
+  void canGetAllProducts() throws IOException {
     // Create our fake Javalin context
     String path = "api/pantry";
     Context ctx = mockContext(path);
@@ -325,7 +325,7 @@ public class PantryControllerSpec {
   }
 
   @Test
-  public void badRequestResponseGetAllProducts() throws IOException {
+  void badRequestResponseGetAllProducts() throws IOException {
     // Create our fake Javalin context
     String path = "api/pantry";
     Context ctx = mockContext(path);
@@ -346,7 +346,7 @@ public class PantryControllerSpec {
   }
 
   @Test
-  public void notFoundResponseGetAllProducts() throws IOException {
+  void notFoundResponseGetAllProducts() throws IOException {
     // Create our fake Javalin context
     String path = "api/pantry";
     Context ctx = mockContext(path);
@@ -368,7 +368,7 @@ public class PantryControllerSpec {
   }
 
   @Test
-  public void addProduct() throws IOException {
+  void addProduct() throws IOException {
 
     String testNewEntry = "{"
         + "\"product\": \"" + bananaEntryId.toHexString() + "\","
@@ -404,7 +404,7 @@ public class PantryControllerSpec {
   }
 
   @Test
-  public void addProductWithBadProduct() throws IOException {
+  void addProductWithBadProduct() throws IOException {
 
     String testNewEntry = "{"
         + "\"product\": \"6224ba3bfc13ae3ac400000e\","
@@ -423,7 +423,7 @@ public class PantryControllerSpec {
   }
 
   @Test
-  public void addProductWithBadNote() throws IOException {
+  void addProductWithBadNote() throws IOException {
 
     String testNewEntry = "{"
         + "\"product\": \"" + bananaEntryId.toHexString() + "\","
@@ -442,7 +442,7 @@ public class PantryControllerSpec {
   }
 
   @Test
-  public void deleteProduct() throws IOException {
+  void deleteProduct() throws IOException {
     String testID = appleEntryId.toHexString();
 
     // Product exists before deletion
@@ -459,7 +459,7 @@ public class PantryControllerSpec {
   }
 
   @Test
-  public void canGetPantryInfo() throws IOException {
+  void canGetPantryInfo() throws IOException {
     // Create our fake Javalin context
     String path = "api/pantry/info";
     Context ctx = mockContext(path);
