@@ -157,7 +157,6 @@ export class ProductFormComponent implements OnInit, OnDestroy {
       ).subscribe(product => {
         this.product = product;
         this.createForms();
-        console.log(this.productForm.controls.productName);
       });
     }
     else {
