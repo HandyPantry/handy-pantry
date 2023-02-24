@@ -114,10 +114,6 @@ const MATERIAL_MODULES: any[] = [
     NgxPrintModule
   ],
   providers: [
-    ProductService,
-    PantryService,
-    ShoppinglistService,
-    PantryProductsListComponent,
     ProductListComponent,
     Title
   ],

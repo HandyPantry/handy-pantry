@@ -36,7 +36,7 @@ import io.javalin.http.util.ContextUtil;
 import io.javalin.plugin.json.JavalinJackson;
 
 @SuppressWarnings({ "MagicNumber" })
-public class ShoppingListGenerationSpec {
+class ShoppingListGenerationSpec {
 
   private MockHttpServletRequest mockReq = new MockHttpServletRequest();
   private MockHttpServletResponse mockRes = new MockHttpServletResponse();
@@ -53,7 +53,7 @@ public class ShoppingListGenerationSpec {
   private static JavalinJackson javalinJackson = new JavalinJackson();
 
   @BeforeAll
-  public static void setupAll() {
+  static void setupAll() {
     String mongoAddr = System.getenv().getOrDefault("MONGO_ADDR", "localhost");
 
     mongoClient = MongoClients.create(
@@ -65,13 +65,13 @@ public class ShoppingListGenerationSpec {
   }
 
   @AfterAll
-  public static void teardown() {
+  static void teardown() {
     db.drop();
     mongoClient.close();
   }
 
   @BeforeEach
-  public void setupEach() throws IOException {
+  void setupEach() throws IOException {
     mockReq.resetAll();
     mockRes.resetAll();
 
@@ -199,7 +199,7 @@ public class ShoppingListGenerationSpec {
   }
 
   @Test
-  public void canGenerateShoppingList() throws IOException {
+  void canGenerateShoppingList() throws IOException {
 
     mockReq.setMethod("PUT");
 

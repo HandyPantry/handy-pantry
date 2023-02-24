@@ -50,7 +50,7 @@ import io.javalin.plugin.json.JavalinJackson;
 // also a lot of "magic strings" that Checkstyle doesn't actually
 // flag as a problem) make more sense.
 @SuppressWarnings({ "MagicNumber", "NoWhitespaceAfter", "LineLength" })
-public class ProductControllerPutSpec {
+class ProductControllerPutSpec {
   // Mock requests and responses that will be reset in `setupEach()`
   // and then (re)used in each of the tests.
   private MockHttpServletRequest mockReq = new MockHttpServletRequest();
@@ -85,7 +85,7 @@ public class ProductControllerPutSpec {
    * engine.
    */
   @BeforeAll
-  public static void setupAll() {
+  static void setupAll() {
     String mongoAddr = System.getenv().getOrDefault("MONGO_ADDR", "localhost");
 
     mongoClient = MongoClients.create(
@@ -97,13 +97,13 @@ public class ProductControllerPutSpec {
   }
 
   @AfterAll
-  public static void teardown() {
+  static void teardown() {
     db.drop();
     mongoClient.close();
   }
 
   @BeforeEach
-  public void setupEach() throws IOException {
+  void setupEach() throws IOException {
     // Reset our mock request and response objects
     mockReq.resetAll();
     mockRes.resetAll();
@@ -223,7 +223,7 @@ public class ProductControllerPutSpec {
   }
 
   @Test
-  public void testEditingItem() {
+  void testEditingItem() {
     String testId = milksId.toHexString();
 
     String testNewProduct = "{"

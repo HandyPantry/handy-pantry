@@ -6,13 +6,9 @@ import { Product } from '../../product';
   templateUrl: './dialog-delete.component.html',
   styleUrls: ['./dialog-delete.component.scss']
 })
-export class DialogDeleteComponent implements OnInit {
+export class DialogDeleteComponent {
 
   constructor(public dialogRef: MatDialogRef<DialogDeleteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Product) {
   }
-
-  ngOnInit(): void {
-  }
-
 }

@@ -7,12 +7,8 @@ import { ShoppinglistDisplayItem } from '../shoppinglistDisplayItem';
   templateUrl: './shoppinglist-dialog-delete.component.html',
   styleUrls: ['./shoppinglist-dialog-delete.component.scss']
 })
-export class ShoppinglistDialogDeleteComponent implements OnInit {
+export class ShoppinglistDialogDeleteComponent {
 
   constructor(public dialogRef: MatDialogRef<ShoppinglistDialogDeleteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ShoppinglistDisplayItem) { }
-
-  ngOnInit(): void {
-  }
-
 }

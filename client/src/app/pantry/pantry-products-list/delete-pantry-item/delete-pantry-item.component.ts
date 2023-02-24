@@ -8,12 +8,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   templateUrl: './delete-pantry-item.component.html',
   styleUrls: ['./delete-pantry-item.component.scss']
 })
-export class DeletePantryItemComponent implements OnInit {
+export class DeletePantryItemComponent {
 
   constructor(public dialogRef: MatDialogRef<DeletePantryItemComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ComboItem) { }
-
-  ngOnInit(): void {
-  }
-
 }

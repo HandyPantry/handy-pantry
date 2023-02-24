@@ -43,7 +43,7 @@ import io.javalin.plugin.json.JavalinJackson;
 import com.mongodb.client.MongoDatabase;
 
 @SuppressWarnings({ "MagicNumber", "NoWhitespaceAfter" })
-public class ShoppingListControllerSpec {
+class ShoppingListControllerSpec {
   private MockHttpServletRequest mockReq = new MockHttpServletRequest();
   private MockHttpServletResponse mockRes = new MockHttpServletResponse();
 
@@ -79,7 +79,7 @@ public class ShoppingListControllerSpec {
    * engine.
    */
   @BeforeAll
-  public static void setupAll() {
+  static void setupAll() {
     String mongoAddr = System.getenv().getOrDefault("MONGO_ADDR", "localhost");
 
     mongoClient = MongoClients.create(
@@ -90,13 +90,13 @@ public class ShoppingListControllerSpec {
   }
 
   @AfterAll
-  public static void teardown() {
+  static void teardown() {
     db.drop();
     mongoClient.close();
   }
 
   @BeforeEach
-  public void setupEach() throws IOException {
+  void setupEach() throws IOException {
     // Reset our mock request and response objects
     mockReq.resetAll();
     mockRes.resetAll();
@@ -223,7 +223,7 @@ public class ShoppingListControllerSpec {
   }
 
   @Test
-  public void canGetAllShoppingListItems() throws IOException {
+  void canGetAllShoppingListItems() throws IOException {
     // Create our fake Javalin context
     String path = "api/shoppinglist";
     Context ctx = mockContext(path);
@@ -241,7 +241,7 @@ public class ShoppingListControllerSpec {
   }
 
   @Test
-  public void addNewShoppingListItem() throws IOException {
+  void addNewShoppingListItem() throws IOException {
 
     String testNewEntry = "{"
         + "\"product\": \"" + bananaProductId.toHexString() + "\","
@@ -278,7 +278,7 @@ public class ShoppingListControllerSpec {
   }
 
   @Test
-  public void deleteShoppingListItem() throws IOException {
+  void deleteShoppingListItem() throws IOException {
     String testID = appleEntryId.toHexString();
 
     // Item exists before deletion
@@ -295,7 +295,7 @@ public class ShoppingListControllerSpec {
   }
 
   @Test
-  public void cannotDeleteNonexistentShoppingListItem() throws IOException {
+  void cannotDeleteNonexistentShoppingListItem() throws IOException {
     String testID = "588935f57546a2daea44de7c";
 
     // Product exists before deletion

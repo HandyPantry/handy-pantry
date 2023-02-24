@@ -1,5 +1,5 @@
 package umm3601.shoppinglist;
-import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings({ "VisibilityModifier", "MemberName" })
 public class ShoppingListStoreGroup {
@@ -8,6 +8,6 @@ public class ShoppingListStoreGroup {
   // By default Java field names shouldn't start with underscores.
   // Here, though, we *have* to use the name `_id` to match the
   // name of the field as used by MongoDB.
-  public ArrayList<ShoppingListDisplayItem> products;
+  public List<ShoppingListDisplayItem> products;
   public String store;
 }

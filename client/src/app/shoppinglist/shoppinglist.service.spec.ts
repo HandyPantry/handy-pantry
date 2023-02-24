@@ -119,4 +119,36 @@ describe('ShoppinglistService', () => {
   it('checks if product is in shoppinglist with post to api/shoppinglist', () => {
     shoppinglistService.productInShoppinglist(testShoppinglistItem.product);
   });
+
+  it('should have an empty shopping list when the list is reset.', () => {
+    shoppinglistService.resetShoppingList().subscribe(
+      resetResult => expect(resetResult).toBeNull()
+    );
+
+    // Specify that (exactly) one request will be made to the specified URL.
+    const resetReq = httpTestingController.expectOne(shoppinglistService.shoppinglistUrl);
+    // Check that the request made to that URL was a PUT request.
+    expect(resetReq.request.method).toEqual('PUT');
+    // Specify the content of the response to that request. This
+    // triggers the subscribe above, which leads to that check
+    // actually being performed.
+    resetReq.flush(null);
+  });
+
+  it('should delete a specified item that is in the list', () => {
+    const itemToDelete = testShoppinglistStoreGroups[1];
+    const idToDelete = itemToDelete.products[0]._id;
+    shoppinglistService.deleteItem(idToDelete).subscribe(
+      deleteResult => expect(deleteResult).toBeTrue()
+    );
+
+    // Specify that (exactly) one request will be made to the specified URL.
+    const deleteReq = httpTestingController.expectOne(shoppinglistService.shoppinglistUrl + '/' + idToDelete);
+    // Check that the request made to that URL was a DELETE request.
+    expect(deleteReq.request.method).toEqual('DELETE');
+    // Specify the content of the response to that request. This
+    // triggers the subscribe above, which leads to that check
+    // actually being performed.
+    deleteReq.flush(true);
+  });
 });

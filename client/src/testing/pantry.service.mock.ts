@@ -9,7 +9,9 @@ import { PantryItem } from 'src/app/pantry/pantryItem';
  * A "mock" version of the `PantryService` that can be used to test components
  * without having to create an actual service.
  */
- @Injectable()
+ @Injectable({
+  providedIn: 'root'
+ })
  export class MockPantryService extends PantryService {
    static testPantryProducts: Product[] = [
     {

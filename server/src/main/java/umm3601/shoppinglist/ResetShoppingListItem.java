@@ -1,5 +1,5 @@
 package umm3601.shoppinglist;
-import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings({ "VisibilityModifier", "MemberName" })
 public class ResetShoppingListItem {
@@ -13,10 +13,10 @@ public class ResetShoppingListItem {
   public String lifespan;
   public String location;
   public String notes;
-  public ArrayList<LookupOutputItem> outputProducts;
+  public List<LookupOutputItem> outputProducts;
   public String productName;
   public String store;
-  public ArrayList<String> tags;
+  public List<String> tags;
   public int threshold;
   public int numberToBuy;
 }

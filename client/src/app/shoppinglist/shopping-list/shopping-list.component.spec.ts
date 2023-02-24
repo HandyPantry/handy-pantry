@@ -86,13 +86,4 @@ describe('ShoppingListComponent', () => {
     shoppinglist.getShoppinglistFromServer();
     expect(shoppinglist.shoppingList.length).toBe(3);
   });
-
-  it('should have the correct shopping list when the list is reset.', () => {
-    const resetSpy = spyOn(shoppinglistService, 'resetShoppingList').and.callThrough();
-
-    shoppinglistService.resetShoppingList();
-
-    expect(resetSpy).toHaveBeenCalled();
-    expect(resetSpy.calls.mostRecent().args).toEqual([]);
-  });
 });

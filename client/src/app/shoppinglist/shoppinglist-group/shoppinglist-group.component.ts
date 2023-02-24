@@ -11,16 +11,12 @@ import { ShoppinglistStoreGroup } from '../shoppinglistStoreGroup';
   templateUrl: './shoppinglist-group.component.html',
   styleUrls: ['./shoppinglist-group.component.scss']
 })
-export class ShoppinglistGroupComponent implements OnInit {
+export class ShoppinglistGroupComponent {
   @Input() list: ShoppinglistStoreGroup[];
 
   constructor(private snackBar: MatSnackBar,
      private shoppinglistService: ShoppinglistService,
      private dialog: MatDialog) {}
-
-  ngOnInit(): void {
-
-  }
 
   //Pops up a dialog to delete a product from the product list
   /* istanbul ignore next */

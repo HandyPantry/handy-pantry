@@ -1,6 +1,6 @@
 package umm3601.product;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings({ "VisibilityModifier"})
 public class CategorySortItem {
@@ -8,5 +8,5 @@ public class CategorySortItem {
   @SuppressWarnings({ "MemberName" })
   public String category;
   public int count;
-  public ArrayList<Product> products;
+  public List<Product> products;
 }

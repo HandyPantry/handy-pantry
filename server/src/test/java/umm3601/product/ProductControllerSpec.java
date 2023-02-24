@@ -56,7 +56,7 @@ import io.javalin.plugin.json.JavalinJackson;
 // also a lot of "magic strings" that Checkstyle doesn't actually
 // flag as a problem) make more sense.
 @SuppressWarnings({ "MagicNumber", "NoWhitespaceAfter" })
-public class ProductControllerSpec {
+class ProductControllerSpec {
 
   // Mock requests and responses that will be reset in `setupEach()`
   // and then (re)used in each of the tests.
@@ -92,7 +92,7 @@ public class ProductControllerSpec {
    * engine.
    */
   @BeforeAll
-  public static void setupAll() {
+  static void setupAll() {
     String mongoAddr = System.getenv().getOrDefault("MONGO_ADDR", "localhost");
 
     mongoClient = MongoClients.create(
@@ -103,13 +103,13 @@ public class ProductControllerSpec {
   }
 
   @AfterAll
-  public static void teardown() {
+  static void teardown() {
     db.drop();
     mongoClient.close();
   }
 
   @BeforeEach
-  public void setupEach() throws IOException {
+  void setupEach() throws IOException {
     // Reset our mock request and response objects
     mockReq.resetAll();
     mockRes.resetAll();
@@ -296,7 +296,7 @@ public class ProductControllerSpec {
 
 
   @Test
-  public void canGetAllProducts() throws IOException {
+  void canGetAllProducts() throws IOException {
     // Create our fake Javalin context
     String path = "api/products";
     Context ctx = mockContext(path);
@@ -314,7 +314,7 @@ public class ProductControllerSpec {
   }
 
   @Test
-  public void canGetProductsByName() throws IOException {
+  void canGetProductsByName() throws IOException {
     mockReq.setQueryString("productName=Bread");
     Context ctx = mockContext("api/products");
 
@@ -329,7 +329,7 @@ public class ProductControllerSpec {
   }
 
   @Test
-  public void canGetProductsByBrand() throws IOException {
+  void canGetProductsByBrand() throws IOException {
     mockReq.setQueryString("brand=Dole");
     Context ctx = mockContext("api/products");
 
@@ -344,7 +344,7 @@ public class ProductControllerSpec {
   }
 
   @Test
-  public void getProductsByStore() throws IOException {
+  void getProductsByStore() throws IOException {
     mockReq.setQueryString("store=Willies");
     Context ctx = mockContext("api/products");
 
@@ -359,7 +359,7 @@ public class ProductControllerSpec {
   }
 
   @Test
-  public void getProductsByCategory() throws IOException {
+  void getProductsByCategory() throws IOException {
     mockReq.setQueryString("category=dairy");
     Context ctx = mockContext("api/products");
 
@@ -374,7 +374,7 @@ public class ProductControllerSpec {
   }
 
   @Test
-  public void getProductsBySortbyDesc() throws IOException {
+  void getProductsBySortbyDesc() throws IOException {
 
     String path = "api/products";
     Context ctx = mockContext(path);
@@ -389,7 +389,7 @@ public class ProductControllerSpec {
   }
 
   @Test
-  public void getProductWithExistentId() throws IOException {
+  void getProductWithExistentId() throws IOException {
     String testID = milksId.toHexString();
     Context ctx = mockContext("api/products/{id}", Map.of("id", testID));
 
@@ -402,7 +402,7 @@ public class ProductControllerSpec {
   }
 
   @Test
-  public void getProductWithBadId() throws IOException {
+  void getProductWithBadId() throws IOException {
     Context ctx = mockContext("api/products/{id}", Map.of("id", "bad"));
 
     assertThrows(BadRequestResponse.class, () -> {
@@ -411,7 +411,7 @@ public class ProductControllerSpec {
   }
 
   @Test
-  public void getProductWithNonexistentId() throws IOException {
+  void getProductWithNonexistentId() throws IOException {
     Context ctx = mockContext("api/products/{id}", Map.of("id", "58af3a600343927e48e87335"));
 
     assertThrows(NotFoundResponse.class, () -> {
@@ -420,7 +420,7 @@ public class ProductControllerSpec {
   }
 
   @Test
-  public void groupProductsByCategory() {
+  void groupProductsByCategory() {
     Context ctx = mockContext("api/products/group");
 
     productController.groupProductsByCategory(ctx);
@@ -440,7 +440,7 @@ public class ProductControllerSpec {
   }
 
   @Test
-  public void addProduct() throws IOException {
+  void addProduct() throws IOException {
 
     String testNewProduct = "{"
         + "\"productName\": \"Test Product name\","
@@ -491,7 +491,7 @@ public class ProductControllerSpec {
   }
 
   @Test
-  public void deleteProduct() throws IOException {
+  void deleteProduct() throws IOException {
     String testID = milksId.toHexString();
 
     // Product exists before deletion
@@ -508,7 +508,7 @@ public class ProductControllerSpec {
   }
 
   @Test
-  public void cannotDeleteNonexistentProduct() throws IOException {
+  void cannotDeleteNonexistentProduct() throws IOException {
     String testID = "588935f57546a2daea44de7c";
 
     // Product exists before deletion

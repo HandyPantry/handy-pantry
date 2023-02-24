@@ -23,7 +23,9 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
       if (this.getProductSub) {
         this.getProductSub.unsubscribe();
       }
-      this.getProductSub = this.productService.getProductById(this.id).subscribe(product => this.product = product);
+      this.getProductSub = this.productService.getProductById(this.id).subscribe(
+        product => { this.product = product; }
+      );
     });
   }
 
@@ -32,5 +34,4 @@ export class SingleProductPageComponent implements OnInit, OnDestroy {
       this.getProductSub.unsubscribe();
     }
   }
-
 }

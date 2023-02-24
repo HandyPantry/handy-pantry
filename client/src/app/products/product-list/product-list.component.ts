@@ -130,6 +130,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.serverFilteredProducts = returnedProducts;
       this.updateFilter();
     }, err => {
+      // TODO: We should change this `console.log` to some sort of error message for
+      // the users, such as a snackbar alert.
+      // skipcq: JS-0002
       console.log(err);
     });
   }
