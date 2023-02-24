@@ -19,22 +19,26 @@ export class PantryProductsListPage {
 
   getTableProductNameByCategory(category: string) {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel .' + category.replace(' ', '-')
-     + '-table tbody tr .cdk-column-productName');
+      + '-table tbody tr .cdk-column-productName');
   }
 
   getTableNotesByCategory(category: string) {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel .' + category.replace(' ', '-')
-     + '-table tbody tr .pantry-detail-description');
+      + '-table tbody tr .pantry-detail-description');
   }
 
   getTablePurchaseDateByCategory(category: string) {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel .' + category.replace(' ', '-')
-     + '-table tbody tr .cdk-column-purchase_date');
+      + '-table tbody tr .cdk-column-purchase_date');
   }
 
   clickRemoveButton(category: string) {
-    return cy.get('.' + category.replace(' ', '-') + '-expansion-panel').click().get('.' + category.replace(' ', '-') +
-    '-table' + ' tbody tr .cdk-column-remove [data-test=deleteItemButton]').first().click();
+    return cy.get('.' + category.replace(' ', '-') + '-expansion-panel')
+      .click()
+      .get('.' + category.replace(' ', '-')
+        + '-table tbody tr .cdk-column-remove [data-test=deleteItemButton]')
+      .first()
+      .click();
   }
 
   clickDeleteButton() {
