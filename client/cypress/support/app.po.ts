@@ -1,9 +1,9 @@
 export class AppPage {
-  navigateTo() {
+  static navigateTo() {
     return cy.visit('/');
   }
 
-  getNavLink(navOption: 'Pantry' | 'Products' | 'Shopping List') {
+  static getNavLink(navOption: 'Pantry' | 'Products' | 'Shopping List') {
     return cy.contains('[routerlink] > .mat-list-item-content', navOption);
   }
 }

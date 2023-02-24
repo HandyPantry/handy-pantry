@@ -1,38 +1,38 @@
 
 export class PantryProductsListPage {
 
-  navigateTo() {
+  static navigateTo() {
     return cy.visit('./');
   }
 
-  getUrl() {
+  static getUrl() {
     return cy.url();
   }
 
-  getProductListTitle() {
+  static getProductListTitle() {
     return cy.get('.pantry-products-list-title');
   }
 
-  getExpansionTitleByCategory(category: string) {
+  static getExpansionTitleByCategory(category: string) {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel .' + category.replace(' ', '-') + '-panel-title');
   }
 
-  getTableProductNameByCategory(category: string) {
+  static getTableProductNameByCategory(category: string) {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel .' + category.replace(' ', '-')
       + '-table tbody tr .cdk-column-productName');
   }
 
-  getTableNotesByCategory(category: string) {
+  static getTableNotesByCategory(category: string) {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel .' + category.replace(' ', '-')
       + '-table tbody tr .pantry-detail-description');
   }
 
-  getTablePurchaseDateByCategory(category: string) {
+  static getTablePurchaseDateByCategory(category: string) {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel .' + category.replace(' ', '-')
       + '-table tbody tr .cdk-column-purchase_date');
   }
 
-  clickRemoveButton(category: string) {
+  static clickRemoveButton(category: string) {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel')
       .click()
       .get('.' + category.replace(' ', '-')
@@ -41,7 +41,7 @@ export class PantryProductsListPage {
       .click();
   }
 
-  clickDeleteButton() {
+  static clickDeleteButton() {
     return cy.get('[data-test=dialogDelete]').click();
   }
 

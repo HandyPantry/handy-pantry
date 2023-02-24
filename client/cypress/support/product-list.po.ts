@@ -2,31 +2,31 @@ import { ProductCategory } from 'src/app/products/product';
 import { Product } from 'src/app/products/product';
 
 export class ProductListPage {
-  navigateTo() {
+  static navigateTo() {
     return cy.visit('./products');
   }
 
-  getUrl() {
+  static getUrl() {
     return cy.url();
   }
 
-  getProductListTitle() {
+  static getProductListTitle() {
     return cy.get('.product-list-title');
   }
 
-  getFilteredProductListItems() {
+  static getFilteredProductListItems() {
     return cy.get('.filtered-product-list-item');
   }
 
-  getExpansionTitleByCategory(category: string) {
+  static getExpansionTitleByCategory(category: string) {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel .' + category.replace(' ', '-') + '-panel-title');
   }
 
-  getExpansionItemsByCategory(category: string) {
+  static getExpansionItemsByCategory(category: string) {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel .' + category.replace(' ', '-') + '-nav-list');
   }
 
-  selectCategory(value: ProductCategory) {
+  static selectCategory(value: ProductCategory) {
     // Find and click the drop down
     return cy.get('[data-test=productCategorySelect]').click()
       // Select and click the desired value from the resulting menu
@@ -38,18 +38,18 @@ export class ProductListPage {
    *
    * @param value The store *value* to select, this is what's found in the mat-option "value" attribute.
    */
-  selectStore(value: string) {
+  static selectStore(value: string) {
     // Find and click the drop down
     return cy.get('[data-test=productStoreSelect]').click()
       // Select and click the desired value from the resulting menu
       .get(`mat-option`).contains(value).click({ force: true });
   }
 
-  addProductButton() {
+  static addProductButton() {
     return cy.get('[data-test=addProductButton]');
   }
 
-  clickDeleteButton() {
+  static clickDeleteButton() {
     return this.getFilteredProductListItems()
       .first()
       .within(($product) => {
@@ -58,7 +58,7 @@ export class ProductListPage {
       });
   }
 
-  clickExpansionDeleteButton(category: string) {
+  static clickExpansionDeleteButton(category: string) {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel')
       .click()
       .get('.' + category.replace(' ', '-') + '-nav-list')
@@ -69,7 +69,7 @@ export class ProductListPage {
       });
   }
 
-  clickAddButton() {
+  static clickAddButton() {
     return this.getFilteredProductListItems()
       .first()
       .within(($product) => {
@@ -78,7 +78,7 @@ export class ProductListPage {
       });
   }
 
-  clickExpansionAddButton(category: string) {
+  static clickExpansionAddButton(category: string) {
     return cy.get('.' + category.replace(' ', '-') + '-expansion-panel')
       .click()
       .get('.' + category.replace(' ', '-') + '-nav-list')
@@ -89,7 +89,7 @@ export class ProductListPage {
       });
   }
 
-  clickAddShoppingButton() {
+  static clickAddShoppingButton() {
     return this.getFilteredProductListItems()
       .first()
       .within(($product) => {
@@ -98,7 +98,7 @@ export class ProductListPage {
       });
   }
 
-  clickExpansionAddShoppingButton(category: string) {
+  static clickExpansionAddShoppingButton(category: string) {
     return cy.get(`.${category.replace(' ', '-')}-expansion-panel`)
       .click()
       .get(`.${category.replace(' ', '-')}-nav-list`)
@@ -109,51 +109,51 @@ export class ProductListPage {
       });
   }
 
-  enterPurchaseDate(purchaseDate: string) {
+  static enterPurchaseDate(purchaseDate: string) {
     return cy.get('[data-test=date-picker-button]').type(purchaseDate);
   }
 
-  enterNotes(notes: string) {
+  static enterNotes(notes: string) {
     return cy.get('[data-test=notesInput]').type(notes);
   }
 
-  enterPantryQuantity(quantity: string) {
+  static enterPantryQuantity(quantity: string) {
     return cy.get('[data-test=pantryQuantityInput]').clear().type(quantity);
   }
 
-  enterShoppingListCount(count: string) {
+  static enterShoppingListCount(count: string) {
     return cy.get('[data-test=shoppingListCountInput]').type(count);
   }
 
-  clickDialogAddButton() {
+  static clickDialogAddButton() {
     return cy.get('[data-test=confirmAddProductToPantryButton]').click();
   }
 
-  clickDialogAddShoppingButton() {
+  static clickDialogAddShoppingButton() {
     return cy.get('[data-test=confirmAddProductToShoppinglistButton]').click({ force: true });
   }
 
-  clickDialogGoToShoppingButton() {
+  static clickDialogGoToShoppingButton() {
     return cy.get('[data-test=goToShoppingListButton]').click({ force: true });
   }
 
-  clickDialogDeleteButton() {
+  static clickDialogDeleteButton() {
     return cy.get('[data-test=dialogDelete]').click();
   }
 
-  getAddProductFormField(fieldName: string) {
+  static getAddProductFormField(fieldName: string) {
     return cy.get(`mat-form-field [formControlName=${fieldName}]`);
   }
 
-  selectMatSelectValue(select: Cypress.Chainable, value: string) {
+  static selectMatSelectValue(select: Cypress.Chainable, value: string) {
     return select.click().get(`mat-option[value="${value}"]`).click();
   }
 
-  addProductSubmitButton() {
+  static addProductSubmitButton() {
     return cy.get('[data-test="confirmProductButton"]');
   }
 
-  addNewProductToDatabase(product: Product) {
+  static addNewProductToDatabase(product: Product) {
     cy.visit('/products/new');
 
     this.getAddProductFormField('productName').type(product.productName);
