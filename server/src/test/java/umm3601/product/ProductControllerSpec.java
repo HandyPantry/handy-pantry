@@ -281,16 +281,16 @@ public class ProductControllerSpec {
 
   /**
    * A little helper method that assumes that the given context
-   * body contains a list of CategorySortItems, and extracts and returns
+   * body contains a list of CategorySortProducts, and extracts and returns
    * that list.
    *
    * @param ctx the `Context` whose body is assumed to contain
-   *            a list of `CategorySortItem`.
-   * @return the list of `CategorySortItem` extracted from the given `Context`.
+   *            a list of `CategorySortProduct`.
+   * @return the list of `CategorySortProduct` extracted from the given `Context`.
    */
-  private CategorySortItem[] getGroupedItems(Context ctx) {
+  private CategorySortProduct[] getGroupedItems(Context ctx) {
     String result = ctx.resultString();
-    CategorySortItem[] items = javalinJackson.fromJsonString(result, CategorySortItem[].class);
+    CategorySortProduct[] items = javalinJackson.fromJsonString(result, CategorySortProduct[].class);
     return items;
   }
 
@@ -421,15 +421,15 @@ public class ProductControllerSpec {
 
   @Test
   public void groupProductsByCategory() {
-    Context ctx = mockContext("api/products/group");
+    Context ctx = mockContext("api/products-by-category");
 
     productController.groupProductsByCategory(ctx);
-    CategorySortItem[] returnedItems = getGroupedItems(ctx);
+    CategorySortProduct[] returnedItems = getGroupedItems(ctx);
 
     //check that there are 5 different categories with items
     assertEquals(5, returnedItems.length);
 
-    for (CategorySortItem item : returnedItems) {
+    for (CategorySortProduct item : returnedItems) {
       //check that the count is equal to the number of products
       assertEquals(item.count, item.products.size());
       //check that each item has the correct category

@@ -1,6 +1,6 @@
 <div fxLayout="row">
   <div fxLayout="row" fxFlexFill>
-    <div fxFlex fxFlex.gt-sm="80" fxFlexOffset.gt-sm="10" *ngIf="matchingProducts; else productsError"
+    <div fxFlex fxFlex.gt-sm="80" fxFlexOffset.gt-sm="10" *ngIf="groupedPantryItems; else productsError"
       style="width: 90%;">
       <!-- All pantry items separated into categories and listed in dropdowns -->
       <mat-card class="expansion-product-panels">
@@ -12,12 +12,12 @@
               [ngClass]="productCategory.key.replace(' ', '-') + '-expansion-panel'">
               <mat-expansion-panel-header>
                 <mat-panel-title [ngClass]="productCategory.key.replace(' ', '-') + '-panel-title capitalize'">
-                  {{ productCategory.key }}
+                  {{ productCategory.key }} ({{ productCategory.value.count }})
                 </mat-panel-title>
               </mat-expansion-panel-header>
 
               <div>
-                <table mat-table [dataSource]="productCategory.value" multiTemplateDataRows
+                <table mat-table [dataSource]="productCategory.value.pantryItems" multiTemplateDataRows
                   [ngClass]="productCategory.key.replace(' ', '-') + '-table'" class="mat-elevation-z8">
                   <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
                     <th mat-header-cell *matHeaderCellDef class="capitalize"> {{column.replace('_', ' ').replace('N', '
@@ -25,7 +25,7 @@
                     <td *matCellDef="let element" mat-cell>
                       <ng-container *ngIf="(column === 'productName') || (column === 'brand'); then elementBlock"></ng-container>
                       <ng-template #elementBlock>
-                        {{element[column]}}
+                        {{element.product[column]}}
                       </ng-template>
 
                       <ng-container *ngIf="column === 'remove'; then removeButtonBlock"></ng-container>

@@ -6,6 +6,8 @@ import { Product } from '../products/product';
 import { PantryItem } from './pantryItem';
 
 import { PantryService } from './pantry.service';
+import { CategorySortPantryItem } from './CategorySortPantryItem';
+import { PantryDisplayItem } from './pantryDisplayItem';
 
 describe('PantryService', () => {
 
@@ -77,6 +79,47 @@ describe('PantryService', () => {
     }
   ];
 
+  const testPantryDisplayItems: PantryDisplayItem[] = [
+    {
+     _id: 'first_banana',
+     product: testPantryProducts[0],
+     purchase_date: new Date('2022-03-30')
+    },
+    {
+     _id: 'sole_milk',
+     product: testPantryProducts[1],
+     purchase_date: new Date('2020-07-16')
+    },
+    {
+     _id: 'second_banana',
+     product: testPantryProducts[0],
+     purchase_date: new Date('2022-03-31')
+    },
+    {
+     _id: 'sole_bread',
+     product: testPantryProducts[2],
+     purchase_date: new Date('2022-03-27')
+    }
+  ];
+
+  const testGroupedPantryItems: CategorySortPantryItem[] = [
+    {
+      category: 'baked goods',
+      count: 1,
+      pantryItems: [ testPantryDisplayItems[3] ]
+    },
+    {
+      category: 'dairy',
+      count: 1,
+      pantryItems: [ testPantryDisplayItems[1] ]
+    },
+    {
+      category: 'produce',
+      count: 2,
+      pantryItems: [ testPantryDisplayItems[0], testPantryDisplayItems[2] ]
+    }
+  ];
+
   let pantryService: PantryService;
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
@@ -98,48 +141,39 @@ describe('PantryService', () => {
     httpTestingController.verify();
   });
 
-  it('getPantryItems() calls api/pantry', () => {
-    // Assert that the products we get from this call to getPantryItems()
-    // should be our set of test products. Because we're subscribing
-    // to the result of getPantryItems(), this won't actually get
-    // checked until the mocked HTTP request 'returns' a response.
-    // This happens when we call req.flush(testPantryProducts) a few lines
-    // down.
-    pantryService.getPantryProducts().subscribe(
-      products => expect(products).toBe(testPantryProducts)
+  it('getGroupedProducts calls api/pantry-by-category', () => {
+    pantryService.getGroupedPantryItems().subscribe(
+      products => expect(products).toBe(testGroupedPantryItems)
     );
 
-        // Specify that (exactly) one request will be made to the specified URL.
-        const req = httpTestingController.expectOne(pantryService.pantryUrl);
-        // Check that the request made to that URL was a GET request.
-        expect(req.request.method).toEqual('GET');
-        // Specify the content of the response to that request. This
-        // triggers the subscribe above, which leads to that check
-        // actually being performed.
-        req.flush(testPantryProducts);
-
+    const req = httpTestingController.expectOne(
+      (request) => request.url.startsWith(`${pantryService.pantryUrl}-by-category`)
+    );
+    expect(req.request.method).toEqual('GET');
   });
 
-  it('getPantry() calls api/pantry/info', () => {
-    // Assert that the pantryItems we get from this call to getPantryItems()
-    // should be our set of test pantryItems. Because we're subscribing
-    // to the result of getPantryItems(), this won't actually get
-    // checked until the mocked HTTP request 'returns' a response.
-    // This happens when we call req.flush(testPantryProducts) a few lines
-    // down.
-    pantryService.getPantry().subscribe(
-      pantryItems => expect(pantryItems).toBe(testPantryItems)
+  it('addPantryItem makes a POST request to /api/pantry', () => {
+    //The method should return the id of the sent pantry item
+    pantryService.addPantryItem(testPantryItems[0]).subscribe(
+      (id) => expect(id).toEqual(testPantryItems[0]._id)
     );
 
-        // Specify that (exactly) one request will be made to the specified URL.
-        const req = httpTestingController.expectOne(pantryService.pantryInfoUrl);
-        // Check that the request made to that URL was a GET request.
-        expect(req.request.method).toEqual('GET');
-        // Specify the content of the response to that request. This
-        // triggers the subscribe above, which leads to that check
-        // actually being performed.
-        req.flush(testPantryItems);
+    const req = httpTestingController.expectOne(
+      (request) => request.url.startsWith(pantryService.pantryUrl)
+    );
+    expect(req.request.method).toEqual('POST');
+  });
 
+  it('deletePantryItem makes a DELETE request to /api/pantry', () => {
+
+    pantryService.deleteItem(testPantryItems[0]._id).subscribe(
+      (res) => expect(res).toBeTruthy()
+    );
+
+    const req = httpTestingController.expectOne(
+      (request) => request.url.startsWith(pantryService.pantryUrl)
+    );
+    expect(req.request.method).toEqual('DELETE');
   });
 
 });

@@ -68,26 +68,13 @@ describe('PantryProductsListComponent', () => {
     expect(pantryProductsList).toBeTruthy();
   });
 
-  it('populates product and pantry arrays', () => {
-    expect(pantryProductsList.matchingProducts.length).toBe(4);
-    expect(pantryProductsList.pantryInfo.length).toBe(4);
-  });
-
-  it('creates an array of combined pantry/product objects from the two arrays', () => {
-    expect(pantryProductsList.comboItems.length).toBe(4);
-  });
-
-  it('sorts the comboItems array by date purchased', () => {
-    expect(pantryProductsList.comboItems[0].purchase_date).toEqual(new Date('2020-07-16'));
-  });
-
-  it('creates the comboItems with keyvalues from both products and pantryItems', () => {
-    expect(pantryProductsList.comboItems[0].brand).toBe('Land O Lakes');
-    expect(pantryProductsList.comboItems[0]._id).toBe('sole_milk');
+  it('should create a map of pantryItems grouped by category', () => {
+    expect(pantryProductsList.groupedPantryItems.length).toEqual(3);
+    expect(pantryProductsList.groupedPantryItems[0].count).toEqual(1);
   });
 
   it('creates a category map of comboItems', () => {
-    expect(pantryProductsList.categoryNameMap.get('dairy')[0]._id).toBe('sole_milk');
+    expect(pantryProductsList.categoryNameMap.get('dairy').pantryItems[0].product._id).toBe('milk_id');
   });
 
 });

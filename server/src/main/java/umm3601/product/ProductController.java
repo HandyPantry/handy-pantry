@@ -112,7 +112,7 @@ public class ProductController {
   public void groupProductsByCategory(Context ctx) {
     Bson combinedFilter = constructFilter(ctx);
 
-    ArrayList<CategorySortItem> output = productCollection
+    ArrayList<CategorySortProduct> output = productCollection
         .aggregate(
             Arrays.asList(
                 Aggregates.match(combinedFilter),
@@ -126,7 +126,7 @@ public class ProductController {
                         Projections.include("count", "products"),
                         Projections.excludeId())),
                 Aggregates.sort(Sorts.ascending("category"))),
-            CategorySortItem.class)
+            CategorySortProduct.class)
         .into(new ArrayList<>());
 
     // For each product category, this sorts the list of products in that

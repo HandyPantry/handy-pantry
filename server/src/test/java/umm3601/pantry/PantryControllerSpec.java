@@ -173,18 +173,18 @@ public class PantryControllerSpec {
     List<Document> testPantryEntries = new ArrayList<>();
     testPantryEntries.add(
         new Document()
-            .append("product", bananaEntryId.toHexString()) // oid of banana
+            .append("product", bananaEntryId) // oid of banana
             .append("purchase_date", "2022-03-01")
             .append("notes", "I eat these with toothpaste, yum-yum."));
     // Set up two instances beans entered at different dates
     testPantryEntries.add(
         new Document()
-            .append("product", beansEntryId.toHexString()) // oid of beans
+            .append("product", beansEntryId) // oid of beans
             .append("purchase_date", "2022-02-01")
             .append("notes", "My cool product notes."));
     testPantryEntries.add(
         new Document()
-            .append("product", beansEntryId.toHexString()) // oid of beans
+            .append("product", beansEntryId) // oid of beans
             .append("purchase_date", "2022-03-01")
             .append("notes", "My other cool product notes."));
 
@@ -194,7 +194,7 @@ public class PantryControllerSpec {
     appleEntryId = new ObjectId();
     Document apple = new Document()
         .append("_id", appleEntryId)
-        .append("product", bananaEntryId.toHexString())
+        .append("product", bananaEntryId)
         .append("purchase_date", "2023-01-27")
         .append("notes", "check on gerbils every 3 days");
 
@@ -271,6 +271,22 @@ public class PantryControllerSpec {
     String result = ctx.resultString();
     PantryItem pantryItem = javalinJackson.fromJsonString(result, PantryItem.class);
     return pantryItem;
+  }
+
+  /**
+   * A little helper method that assumes that the given context
+   * body contains a list of CategorySortProducts, and extracts and returns
+   * that list.
+   *
+   * @param ctx the `Context` whose body is assumed to contain
+   *            a list of `CategorySortPantryItem`.
+   * @return the list of `CategorySortPantryItem` extracted from the given
+   *         `Context`.
+   */
+  private CategorySortPantryItem[] getGroupedItems(Context ctx) {
+    String result = ctx.resultString();
+    CategorySortPantryItem[] items = javalinJackson.fromJsonString(result, CategorySortPantryItem[].class);
+    return items;
   }
 
   @Test
@@ -365,6 +381,27 @@ public class PantryControllerSpec {
       pantryController.getAllProductsInPantry(ctx);
     });
 
+  }
+
+  @Test
+  public void groupPantryItemsByCategory() {
+    String path = "api/pantry-by-category";
+    Context ctx = mockContext(path);
+
+    pantryController.groupPantryItemsByCategory(ctx);
+
+    CategorySortPantryItem[] returnedPantryItems = getGroupedItems(ctx);
+
+    // check that there are 2 categories with items in them
+    assertEquals(2, returnedPantryItems.length);
+    for (CategorySortPantryItem item : returnedPantryItems) {
+      // check that the count is equal to the number of pantryItems
+      assertEquals(item.count, item.pantryItems.size());
+      // check that each item has the correct category
+      for (PantryDisplayItem p : item.pantryItems) {
+        assertEquals(p.product.category, item.category);
+      }
+    }
   }
 
   @Test

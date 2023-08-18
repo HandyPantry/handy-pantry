@@ -2,6 +2,7 @@ package umm3601.pantry;
 
 import static com.mongodb.client.model.Filters.eq;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +10,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.client.result.DeleteResult;
 
+import org.bson.Document;
 import org.bson.UuidRepresentation;
 import org.bson.types.ObjectId;
 import org.mongojack.JacksonMongoCollection;
@@ -92,6 +98,41 @@ public class PantryController {
 
   }
 
+  public void groupPantryItemsByCategory(Context ctx) {
+
+    ArrayList<CategorySortPantryItem> output = pantryCollection
+        .aggregate(Arrays.asList(
+            // This is the problematic line (for some reason, this isn't working with our
+            // mock setup)
+            Aggregates.lookup("products", "product", "_id", "productData"),
+            Aggregates.unwind("$productData"),
+            Aggregates.group("$productData.category",
+                Accumulators.sum("count", 1),
+                Accumulators.addToSet("pantryItems", new Document("_id", "$_id")
+                    .append("product", "$productData")
+                    .append("purchase_date", "$purchase_date")
+                    .append("notes", "$notes"))),
+            Aggregates.project(
+                Projections.fields(
+                    Projections.computed("category", "$_id"),
+                    Projections.include("count", "pantryItems"),
+                    Projections.excludeId())),
+            Aggregates.unwind("$category"),
+            Aggregates.sort(Sorts.ascending("category"))),
+            CategorySortPantryItem.class)
+        .into(new ArrayList<>());
+
+    /*
+     * This currently sorts the pantry items within the accordion alphabetically by
+     * product name
+     */
+    output.forEach(categoryEntry -> {
+      categoryEntry.pantryItems.sort((first, second) -> {
+        return first.product.productName.compareTo(second.product.productName);
+      });
+    });
+    ctx.json(output);
+  }
 
   /**
    * Checks if the given entry exists with a given id. if no such entry exists
