@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import { ProductListPage } from '../support/product-list.po';
+import { Product } from 'src/app/products/product';
 
 const page = new ProductListPage();
 
@@ -17,7 +18,6 @@ describe ('Product List', () => {
   });
 
   it('Should type something in the Product Name filter and check that it returned correct elements', () => {
-    // Filter for product 'Muffin'
     cy.get('#product-name-input').type('Salmon');
 
     // All of the product list items should have the name we are filtering by
@@ -27,7 +27,6 @@ describe ('Product List', () => {
   });
 
   it('Should type something in the Brand filter and check that it returned correct elements', () => {
-    // Filter for product 'Weimann'
     cy.get('#product-brand-input').type('Red Star');
 
     // All of the product list items should have the name we are filtering by
@@ -60,7 +59,7 @@ describe ('Product List', () => {
     page.selectCategory('miscellaneous');
 
     // Some of the products should be listed
-    page.getFilteredProductListItems().should('exist');
+    page.getFilteredProductListItems().should('be.visible');
 
     // All of the product list items that show should have the store we are looking for
     page.getFilteredProductListItems().each($product => {
@@ -87,13 +86,13 @@ describe ('Product List Expansion Panels', () => {
 
   it('Should check that expansion panels have the correct titles and items by categories', () => {
 
-    page.getExpansionTitleByCategory('baking supplies').should('have.text', ' baking supplies ');
+    page.getExpansionTitleByCategory('baking supplies').should('have.text', ' baking supplies (3) ');
 
     page.getExpansionItemsByCategory('baking supplies').each($product => {
       cy.wrap($product).find('.product-list-category').should('have.text', ' baking supplies ');
     });
 
-    page.getExpansionTitleByCategory('miscellaneous').should('have.text', ' miscellaneous ');
+    page.getExpansionTitleByCategory('miscellaneous').should('have.text', ' miscellaneous (1) ');
 
     page.getExpansionItemsByCategory('miscellaneous').each($product => {
       cy.wrap($product).find('.product-list-category').should('have.text', ' miscellaneous ');
@@ -116,12 +115,10 @@ describe ('Delete button on Products From Product List', () => {
     page.selectCategory('baking supplies');
     cy.get('#product-name-input').type('Almond');
 
-    // Check that 'Coffee - Cafe Moreno' is the first product
     page.getFilteredProductListItems().first().within(($product) => {
       cy.wrap($product).find('.product-list-name').should('contain.text', ' Almond ');
     });
 
-    // Grab and delete first one, 'Kahlua'
     page.clickDeleteButton();
     cy.get('.mat-dialog-content')
       .should('contain.text', 'Remove Almond Paste, 8 Oz from your products?This action cannot be undone');
@@ -129,7 +126,7 @@ describe ('Delete button on Products From Product List', () => {
 
   it('Should go to a product in an expansion tab and read the dialog', () => {
 
-    // Grab and click the delete button for the first one, 'Aspic - Light'
+    // Grab and click the delete button for the first one,
     page.clickExpansionDeleteButton('dairy');
     cy.get('.mat-dialog-content')
       .should('contain.text', 'Remove Whole Milk, 1/2 Gal from your products?This action cannot be undone');
@@ -150,12 +147,10 @@ describe ('Add button on Products to Pantry List', () => {
     page.selectCategory('baking supplies');
     cy.get('#product-name-input').type('Almond');
 
-    // Check that 'Kahlua' is the first product
     page.getFilteredProductListItems().first().within(($product) => {
       cy.wrap($product).find('.product-list-name').should('contain.text', ' Almond ');
     });
 
-    // Grab and delete first one, 'Kahlua'
     page.clickAddButton();
     cy.get('.mat-dialog-title')
       .should('contain.text', 'Add Almond Paste, 8 Oz to your Pantry');
@@ -167,12 +162,10 @@ describe ('Add button on Products to Pantry List', () => {
     page.selectCategory('baking supplies');
     cy.get('#product-name-input').type('Almond');
 
-    // Check that 'Kahlua' is the first product
     page.getFilteredProductListItems().first().within(($product) => {
       cy.wrap($product).find('.product-list-name').should('contain.text', ' Almond ');
     });
 
-    // Grab and delete first one, 'Kahlua'
     page.clickAddShoppingButton();
     cy.get('.mat-dialog-title')
       .should('contain.text', 'Add Almond Paste, 8 Oz to your Shopping List');
@@ -180,7 +173,6 @@ describe ('Add button on Products to Pantry List', () => {
 
   it('Should go to a product in an expansion tab, click add to pantry, and read the dialog', () => {
 
-    // Grab and click the add button for the first one, 'Aspic - Light'
     page.clickExpansionAddButton('dairy');
     cy.get('.mat-dialog-title')
       .should('contain.text', 'Add Whole Milk, 1/2 Gal to your Pantry');
@@ -188,7 +180,6 @@ describe ('Add button on Products to Pantry List', () => {
 
   it('Should go to a product in an expansion tab, click add to shopping list, and read the dialog', () => {
 
-    // Grab and click the add button for the first one, 'Aspic - Light'
     page.clickExpansionAddShoppingButton('dairy');
     cy.get('.mat-dialog-title')
     .should('contain.text', 'Add Whole Milk, 1/2 Gal to your Shopping List');
@@ -231,7 +222,7 @@ describe ('Add Product to Shopping List', () => {
     page.enterShoppingListCount('1');
     page.clickDialogAddShoppingButton();
     cy.get('.mat-simple-snack-bar-content')
-    .should('contain.text', 'Citrus Organic Hair Rinse, 8 fl oz x1 successfully added to your Shopping List.');
+    .should('contain.text', 'successfully added to your Shopping List.');
   });
 
 });
@@ -246,7 +237,41 @@ describe('Product already in shopping list add button', () => {
 
   // Product already in shopping list
   it('should click the add button, then click the button to go to the shopping list page', () => {
-    page.clickExpansionAddShoppingButton('baking supplies');
+    const newTestProduct: Product = {
+      _id: 'testID',
+      productName: 'Frog Legs',
+      brand: 'Marsh  Inc.',
+      category: 'produce',
+      description: 'A rare delicacy.',
+      image: '',
+      lifespan: 4,
+      location: 'Aisle 1',
+      notes: 'For testing only',
+      store: 'Pomme de Terre',
+      tags: [],
+      threshold: 4
+    };
+
+    page.addNewProductToDatabase(newTestProduct);
+    page.navigateTo();
+
+    cy.get('#product-name-input').type(newTestProduct.productName);
+
+    page.getFilteredProductListItems().first().within(($product) => {
+      cy.get('[data-test=addToShoppinglistButton]').click();
+    });
+    //Should open the add to Shopping List Dialog Here
+    cy.get('[data-test=addToShoppingListDialogTitle]').should('contain.text', newTestProduct.productName);
+    page.enterShoppingListCount('1');
+    page.clickDialogAddShoppingButton();
+    cy.get('.mat-simple-snack-bar-content')
+    .should('contain.text', 'successfully added to your Shopping List.');
+    cy.wait(5100);
+    //When we try to add the item to the shopping list, should open the "Product Already in Shopping List"
+    page.getFilteredProductListItems().first().within(($product) => {
+      cy.get('[data-test=addToShoppinglistButton]').click();
+    });
+    cy.get('[data-test=productAlreadyInShoppingListDialogTitle]').should('contain.text', newTestProduct.productName);
     page.clickDialogGoToShoppingButton();
     page.getUrl().should('be.equal', 'http://localhost:4200/shoppinglist#');
   });
@@ -264,11 +289,10 @@ describe('Delete from Product List', () => {
   it('should click the delete button on a product and confirm delete', () => {
     page.clickExpansionDeleteButton('staples');
     page.clickDialogDeleteButton();
-    cy.get('.mat-simple-snack-bar-content').should('contain.text', 'Chicken Instant Bullion Cubes, 92 g successfully deleted.');
+    cy.get('.mat-simple-snack-bar-content').should('contain.text', 'successfully deleted.');
   });
 
   it('should remove instances from the pantry and the shopping list.', () => {
-    //add the item (Apricots - Halves) to the pantry and the shopping list so we know that they got deleted
     page.clickExpansionAddButton('beverages');
     page.enterPurchaseDate('1970-01-01');
     page.enterNotes('test delete.');

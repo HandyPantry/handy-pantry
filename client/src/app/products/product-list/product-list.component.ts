@@ -13,6 +13,7 @@ import { AddProductToShoppinglistComponent } from './add-product-to-shoppinglist
 // eslint-disable-next-line max-len
 import { ProductExistsInShoppinglistDialogComponent } from './product-exists-in-shoppinglist-dialog/product-exists-in-shoppinglist-dialog.component';
 import { ShoppinglistService } from 'src/app/shoppinglist/shoppinglist.service';
+import { CategorySortItem } from '../CategorySortItem';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   public serverFilteredProducts: Product[];
   public filteredProducts: Product[];
+  public groupedProducts: CategorySortItem[];
 
   public name: string;
   public productBrand: string;
@@ -37,6 +39,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   public productLimit: number;
   getProductsSub: Subscription;
   getUnfilteredProductsSub: Subscription;
+  getGroupedProductsSub: Subscription;
 
   // Boolean for if there are active filters
   public activeFilters: boolean;
@@ -74,6 +77,44 @@ export class ProductListComponent implements OnInit, OnDestroy {
   constructor(private productService: ProductService, private snackBar: MatSnackBar, private pantryService: PantryService,
     private shoppinglistService: ShoppinglistService, private dialog: MatDialog) { }
 
+
+  getGroupedProductsFromServer(): void {
+    this.unsub();
+    this.getGroupedProductsSub = this.productService.getGroupedProducts(
+      {
+        category: this.productCategory,
+        store: this.productStore
+      }
+    ).subscribe(returnedProducts => {
+      if (this.productCategory || this.productStore) {
+        this.activeFilters = true;
+      }
+      else {
+        this.activeFilters = false;
+      }
+      this.groupedProducts = returnedProducts;
+      this.extractAllProducts();
+      this.updateFilter();
+    }, err => {
+      console.error(err);
+    }
+    );
+  }
+
+  /**
+   * @deprecated This method exists as a transition between the usage of
+   * getGroupedProducts() and getProductsFromServer().
+   */
+  extractAllProducts(): void {
+    this.serverFilteredProducts = [];
+    for (let category of this.groupedProducts) {
+      this.serverFilteredProducts = this.serverFilteredProducts.concat(category.products);
+    }
+  }
+
+  /**
+   * @deprecated Method no longer in use, use the getGroupedProductsFromServer() instead.
+   */
   getProductsFromServer(): void {
     this.unsub();
     this.getProductsSub = this.productService.getProducts({
@@ -87,7 +128,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.activeFilters = false;
       }
       this.serverFilteredProducts = returnedProducts;
-      this.initializeCategoryMap();
       this.updateFilter();
     }, err => {
       console.log(err);
@@ -99,9 +139,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     for (let givenCategory of this.categoriesList) {
       this.categoryNameMap.set(givenCategory,
         this.productService.filterProducts(this.serverFilteredProducts, { category: givenCategory }));
-
     }
-    console.log(this.categoryNameMap);
   }
 
 
@@ -118,7 +156,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getProductsFromServer();
+    this.getGroupedProductsFromServer();
   }
 
   ngOnDestroy(): void {
@@ -128,6 +166,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   unsub(): void {
     if (this.getProductsSub) {
       this.getProductsSub.unsubscribe();
+    }
+    if (this.getGroupedProductsSub) {
+      this.getGroupedProductsSub.unsubscribe();
     }
   }
 
@@ -154,7 +195,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     });
   }
 
-    // Pops up a dialog to add a product to the shoppinglist
+  // Pops up a dialog to add a product to the shoppinglist
   /* istanbul ignore next */
   openShoppinglistAddDialog(givenProduct: Product) {
     const dialogRef = this.dialog.open(AddProductToShoppinglistComponent, { data: givenProduct });
@@ -173,12 +214,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   // Pops up a dialog for increasing the count of an already existing product in shopping list
-    /* istanbul ignore next */
+  /* istanbul ignore next */
   openShoppinglistExistsDialog(givenProduct: Product) {
     this.dialog.open(ProductExistsInShoppinglistDialogComponent, { data: givenProduct });
   }
 
-    /* istanbul ignore next */
+  /* istanbul ignore next */
   showDialogByProductInShoppingList(givenProduct): void {
     this.shoppinglistService.productInShoppinglist(givenProduct._id).subscribe(
       data => {

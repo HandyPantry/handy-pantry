@@ -118,27 +118,6 @@ public class ShoppingListController {
     return output;
   }
 
-  public void getAllShoppingListItems(Context ctx) {
-    ArrayList<Document> returnedShoppingListItems = shoppingListCollection
-        .aggregate(
-            Arrays.asList(
-                Aggregates.lookup("products", "product", "_id", "productData"),
-                Aggregates.unwind("$productData"),
-                Aggregates.group("$productData.store", Accumulators.addToSet("products",
-                    new Document("productName", "$productData.productName")
-                        .append("location", "$productData.location")
-                        .append("count", "$count"))),
-                Aggregates.project(Projections.fields(
-                    Projections.computed("store", "$_id"),
-                    Projections.include("products"),
-                    Projections.excludeId())),
-                Aggregates.sort(ascending("store"))),
-            Document.class)
-        .into(new ArrayList<>());
-
-    ctx.json(returnedShoppingListItems);
-  }
-
   /**
    * Checks if the given entry exists with a given id. if no such entry exists
    * returns false. Returns true for one or more entry with a matching
